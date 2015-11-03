@@ -12,9 +12,9 @@
 
   <div class="padding">
     <h2 ng-bind="card.get('name')" id="TEST"></h2>
-    <p>Phone: <span ng-bind="card.get('phone')"></span></p>
-    <p>Email: <span ng-bind="card.get('email')"></span></p>
-    <p>Last Contact: <span ng-bind="card.get('lastCall')"></span></p>
+    <p>Phone: <span ng-bind="FormatPhone(card.get('phone'))"></span></p>
+    <p>Email: <a href="mailto:{{card.get('email')}}" ng-bind="card.get('email')"></a></p>
+    <p>Last Contact: <span ng-bind="FormatDate(card.get('lastCall'))"></span></p>
     <p>Contact Interval: <span ng-bind="card.get('intervalDays') + ' days'"></span></p>
 
     <button ng-click="remove(card.id)" class="button button-block button-assertive">
