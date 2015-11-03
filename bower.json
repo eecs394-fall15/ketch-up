@@ -1,0 +1,11 @@
+{
+  "name": "myProject",
+  "version": "0.0.0",
+  "private": true,
+  "dependencies": {
+    "angular": "1.3.x",
+    "supersonic": "1.x",
+    "parse": "~1.3",
+    "parse-angular-patch": "*"
+  }
+}

@@ -1,0 +1,101 @@
+.navbar-title {
+  font-family: 'Dosis';
+  font-weight: 600;
+}
+
+.navbar-back {
+  font-family: 'Dosis';
+}
+
+.button {
+  font-family: 'Dosis';
+  font-weight: 600;
+}
+
+.item {
+  font-family: 'Roboto';
+  font-weight: 300;
+}
+
+.supersonic-navbar-mock {
+  background-color: #00B5FF !important;
+  text-align: center;
+  font-weight: 600;
+}
+
+#new-card button {
+  width: 80%;
+  margin: 15px 10%;
+  border-radius: 10px;
+  moz-border-radius: 10px;
+  webkit-border-radius: 10px;
+}
+
+#my-cards {
+  background-color: #9FC5E7;
+  color: white;
+  font-size: x-large;
+  margin: 0;
+  padding: 15px;
+}
+
+.item h2 {
+	margin: 5px 0;
+  font-family: 'Dosis';
+  font-weight: 600;
+}
+
+#searchBox {
+  margin: 0;
+}
+
+#new-camera img {
+  width: 48%;
+}
+
+#new-camera {
+  padding: 3% 1%;
+  text-align: center;
+}
+
+.camera {
+  padding: 1%;
+}
+
+.camera img {
+  width: 100%;
+}
+
+#submitButton {
+  width: 80%;
+  margin: 15px 10%;
+}
+
+#badgesList {
+  color: #C0C0C0;
+}
+
+.padding {
+  font-family: 'Roboto';
+}
+
+.padding h2 {
+  font-family: 'Dosis';
+  font-weight: 600;
+}
+
+#new-card .button { 
+  color: #2B74B6;
+}
+
+tab-bar-item#family {
+  background-image: url(icons/family.png);
+}
+
+tab-bar-item#friend {
+  background-image: url(icons/friends.png);
+}
+
+tab-bar-item#coworker {
+  background-image: url(icons/coworkers.png);
+}

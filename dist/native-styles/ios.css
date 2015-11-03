@@ -1,0 +1,65 @@
+/***********************************************************
+ * These styles apply for native components on iOS.
+ * Read more about native styles at http://docs.appgyver.com
+ ***********************************************************/
+
+navigation-bar {
+  background-color: #6FA8DC;
+  color: #ffffff;
+}
+
+navigation-bar title {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 400;
+  font-family: 'Dosis';
+}
+
+navigation-bar button, navigation-bar back-bar-button {
+  color: #ffffff;
+  font-weight: 300;
+}
+
+super-navigate {
+  background-color: #000000;
+  color: #000000;
+}
+
+tab-bar {
+  background-color: #ffffff;
+  border-top: 1px #d8d8d8 solid;
+}
+
+tab-bar tab-bar-item {
+  color: #b0b1b4;
+  font-family: 'Dosis';
+  font-size: 10px;
+}
+
+tab-bar tab-bar-item:selected {
+  color: #1596f7;
+}
+
+tab-bar-item#settings {
+  background-image: url(icons/cog.svg);
+}
+
+tab-bar-item#index {
+  background-image: url(icons/home.svg);
+}
+
+tab-bar-item#internet {
+  background-image: url(icons/search.svg);
+}
+
+tab-bar-item#family {
+  background-image: url(icons/family.png);
+}
+
+tab-bar-item#friend {
+  background-image: url(icons/friends.png);
+}
+
+tab-bar-item#coworker {
+  background-image: url(icons/coworkers.png);
+}

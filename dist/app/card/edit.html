@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script>
+  window.addEventListener('WebComponentsReady', function() {
+    supersonic.app.splashscreen.hide();
+  });
+  </script>
+  <!-- Cloud resource definition file for Supersonic Data -->
+  <script src="/cloud-resources.js"></script>
+  <meta charset="utf8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+
+  <title>edit</title>
+
+  <link rel="stylesheet" href="/components/supersonic/css/supersonic.css" />
+  <link rel="stylesheet" href="/app/common/stylesheets/application.css" />
+  <link rel="import" href="/components/supersonic/components/import.html">
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+  
+  <link href='https://fonts.googleapis.com/css?family=Dosis:400,600' rel='stylesheet' type='text/css'>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500' rel='stylesheet' type='text/css'>
+
+  <script src="http://localhost/cordova.js"></script>
+  <script src="/components/steroids-js/steroids.js"></script>
+  <script src="/components/angular/angular.js"></script>
+  <script src="/components/supersonic/supersonic.js"></script>
+  <script src="/components/webcomponentsjs/webcomponents.js"></script>
+  <script src="/components/parse/parse.min.js"></script>
+  <script src="/components/parse-angular-patch/dist/parse-angular.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+  
+  <script src="/app/common.js"></script>
+  
+  <script src="/app/card.js"></script>
+  
+</head>
+<body ng-app="card" class="content">
+
+<div ng-controller="EditController">
+  <super-navbar>
+    
+    <super-navbar-button class="navbar-back" ng-click="cancel()">
+      Cancel
+    </super-navbar-button>
+
+    <super-navbar-title class="navbar-title">
+      EDIT CARD
+    </super-navbar-title>
+
+    <!-- <super-navbar-button side="right" ng-click="save()")>
+      Save
+    </super-navbar-title> -->
+
+  </super-navbar>
+
+  <div class="list list-inset">
+    
+    <label class="item item-input" id="nameLabel">
+      <span class="input-label">Name</span>
+      <input type="text" value={{card.get('name')}} placeholder="name or nickname" id="editName">
+    </label>
+    
+    <label class="item item-input" id="phoneLabel">
+      <span class="input-label">Phone</span>
+      <input type="text" value={{card.get('phone')}} placeholder="(123) 456-7890" id="editPhone">
+    </label>
+    
+    <label class="item item-input" id="emailLabel">
+      <span class="input-label">Email</span>
+      <input type="email" value={{card.get('email')}} placeholder="example@something.com" id="editEmail">
+    </label>
+  
+    <label class="item item-input" id="intervalLabel">
+      <span class="input-label">Contact Interval</span>
+      <input type="email" value={{card.get('intervalDays')}} placeholder="in days" id="editIntervalDays">
+    </label>
+
+    <label class="item item-input item-select" id="typeLabel">
+      <span class="input-label">Contact Type</span>
+      <select id="editType">
+        <option>- SELECT TYPE -</option>
+        <option>Friend</option>
+        <option>Coworker</option>
+        <option>Family</option>
+      </select>
+    </label>
+
+    <button class="button button-block button-positive" ng-click="save()">Save</button>
+
+  </div>
+</div>
+
+
+</body>
+</html>

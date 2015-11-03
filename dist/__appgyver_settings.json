@@ -1,0 +1,39 @@
+{
+  "preloads": [
+    {
+      "id": "learn-more",
+      "location": "http://localhost/app/example/learn-more.html"
+    },
+    {
+      "id": "using-the-scanner",
+      "location": "http://localhost/app/example/using-the-scanner.html"
+    },
+    {
+      "id": "settings",
+      "location": "http://localhost/app/example/settings.html"
+    }
+  ],
+  "tabs": [
+    {
+      "position": 0,
+      "id": "friend",
+      "title": "Friends",
+      "target_url": "http://localhost/app/card/index.html?type=friend"
+    },
+    {
+      "position": 1,
+      "id": "coworker",
+      "title": "Coworkers",
+      "target_url": "http://localhost/app/card/index.html?type=coworker"
+    },
+    {
+      "position": 2,
+      "id": "family",
+      "title": "Family",
+      "target_url": "http://localhost/app/card/index.html?type=family"
+    }
+  ],
+  "configuration": {
+    "extra_response_headers": {}
+  }
+}

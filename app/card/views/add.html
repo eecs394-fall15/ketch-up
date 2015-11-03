@@ -1,0 +1,50 @@
+<div ng-controller="AddController">
+  <super-navbar>
+    <super-navbar-button class="navbar-back" ng-click="cancel()">
+      Cancel
+    </super-navbar-button>
+    <super-navbar-title class="navbar-title">
+      New Contact
+    </super-navbar-title>
+  </super-navbar>
+
+
+  <div class="list list-inset">
+
+  <label class="item item-input" id="nameLabel">
+    <span class="input-label">Name</span>
+    <input type="text" placeholder="name or nickname" id="name">
+  </label>
+  
+  <label class="item item-input" id="phoneLabel">
+    <span class="input-label">Phone</span>
+    <input type="text" placeholder="(123) 456-7890" id="phone">
+  </label>
+  
+  <label class="item item-input" id="emailLabel">
+    <span class="input-label">Email</span>
+    <input type="email" placeholder="example@something.com" id="email">
+  </label>
+
+  <label class="item item-input" id="intervalLabel">
+    <span class="input-label">Contact Interval</span>
+    <input type="email" placeholder="in days" id="intervalDays">
+  </label>
+
+  <label class="item item-input item-select" id="typeLabel">
+    <span class="input-label">Contact Type</span>
+    <select id="type">
+      <option selected>- SELECT TYPE -</option>
+      <option>Friend</option>
+      <option>Coworker</option>
+      <option>Family</option>
+    </select>
+  </label>
+
+  <br>
+
+  <button class="button button-block button-positive" ng-click="SaveTapped()">Save</button>
+
+  </div>
+
+</div>
