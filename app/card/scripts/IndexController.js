@@ -3,6 +3,18 @@ angular
 	.controller("IndexController", function ($scope, supersonic) {
 
 		$scope.allFamilyCards = undefined;
+		var sortByTimeRemaining = function(e1, e2) {
+			// lastCall, intervalDays
+			var d1 = calculateDaysLeft(e1.get("lastCall"), e1.get("intervalDays"));
+			var d2 = calculateDaysLeft(e2.get("lastCall"), e2.get("intervalDays"));
+			if(d1 < d2) {
+				return -1;
+			}
+			else if(d2 > d1) {
+				return 1;
+			}
+			return 0;
+		}
 
 		var init = function() {
 
@@ -11,6 +23,7 @@ angular
 			var query = new Parse.Query(ContactsObject);
 			query.descending("createdAt").find( {
 				success: function (results) { // Find all values in database and stuff into results. Results will be in descending order by creation date.
+					results.sort( sortByTimeRemaining ) // Sort by amount of time remaining
 					$scope.allFamilyCards = results; // Stuff the results in our global, for future searching.
 					GenerateList(results);
 				},
