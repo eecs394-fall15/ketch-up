@@ -28,10 +28,10 @@ function formValidation(name, phone, email, interval, type) {
 	}
 
 	// Check the phone (remove all parentheses/spaces/dashes and make sure the result is a number, or blank)
-	var removedParenthesesSpacesAndDashes = phone.replace(/[ \(\)-]/g, "")
-	if(isNaN(removedParenthesesSpacesAndDashes)) {
-		result.push("phone")
-	}
+	// var removedParenthesesSpacesAndDashes = phone.replace(/[ \(\)-]/g, "")
+	// if(isNaN(removedParenthesesSpacesAndDashes)) {
+	// 	result.push("phone")
+	// }
 
 	// Check the email (check if it's either a valid email or blank)
 	var re = /^[A-Za-z0-9_%+-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9]{2,}$/;
@@ -267,9 +267,24 @@ angular
 			var listElement = document.createElement("div");
 			listElement.setAttribute("class", "item");
 
+			var daysLeft = calculateDaysLeft(lastCall, intervalDays);
 			var badgeSpan = document.createElement("span");
-			badgeSpan.setAttribute("class", "badge badge-assertive");
-			badgeSpan.innerHTML = calculateDaysLeft(lastCall, intervalDays);
+			if(daysLeft < 0) { // Red; overdue
+				badgeSpan.setAttribute("class", "badge badge-assertive");
+				badgeSpan.innerHTML = "overdue";
+			}
+			else { // Orange, Yellow, Green; not overdue
+				if(daysLeft <= 3) { // Orange
+					badgeSpan.setAttribute("class", "badge badge-orange");
+				}
+				else if(daysLeft <= 7) { // Yellow
+					badgeSpan.setAttribute("class", "badge badge-energized");
+				}
+				else { // Green
+					badgeSpan.setAttribute("class", "badge badge-balanced");
+				}
+				badgeSpan.innerHTML = "call in " + daysLeft;
+			}
 
 			var pName = document.createElement("p");
 			pName.innerHTML = name || "";

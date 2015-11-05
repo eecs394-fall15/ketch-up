@@ -28,10 +28,10 @@ function formValidation(name, phone, email, interval, type) {
 	}
 
 	// Check the phone (remove all parentheses/spaces/dashes and make sure the result is a number, or blank)
-	var removedParenthesesSpacesAndDashes = phone.replace(/[ \(\)-]/g, "")
-	if(isNaN(removedParenthesesSpacesAndDashes)) {
-		result.push("phone")
-	}
+	// var removedParenthesesSpacesAndDashes = phone.replace(/[ \(\)-]/g, "")
+	// if(isNaN(removedParenthesesSpacesAndDashes)) {
+	// 	result.push("phone")
+	// }
 
 	// Check the email (check if it's either a valid email or blank)
 	var re = /^[A-Za-z0-9_%+-]+@(?:[A-Za-z0-9-]+\.)+[A-Za-z0-9]{2,}$/;

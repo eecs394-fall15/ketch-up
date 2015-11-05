@@ -64,9 +64,24 @@ angular
 			var listElement = document.createElement("div");
 			listElement.setAttribute("class", "item");
 
+			var daysLeft = calculateDaysLeft(lastCall, intervalDays);
 			var badgeSpan = document.createElement("span");
-			badgeSpan.setAttribute("class", "badge badge-assertive");
-			badgeSpan.innerHTML = calculateDaysLeft(lastCall, intervalDays);
+			if(daysLeft < 0) { // Red; overdue
+				badgeSpan.setAttribute("class", "badge badge-assertive");
+				badgeSpan.innerHTML = "overdue";
+			}
+			else { // Orange, Yellow, Green; not overdue
+				if(daysLeft <= 3) { // Orange
+					badgeSpan.setAttribute("class", "badge badge-orange");
+				}
+				else if(daysLeft <= 7) { // Yellow
+					badgeSpan.setAttribute("class", "badge badge-energized");
+				}
+				else { // Green
+					badgeSpan.setAttribute("class", "badge badge-balanced");
+				}
+				badgeSpan.innerHTML = "call in " + daysLeft;
+			}
 
 			var pName = document.createElement("p");
 			pName.innerHTML = name || "";
