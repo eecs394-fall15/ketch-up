@@ -269,9 +269,14 @@ angular
 
 			var daysLeft = calculateDaysLeft(lastCall, intervalDays);
 			var badgeSpan = document.createElement("span");
-			if(daysLeft < 0) { // Red; overdue
+			if(daysLeft <= 0) { // Red; overdue or due today
 				badgeSpan.setAttribute("class", "badge badge-assertive");
-				badgeSpan.innerHTML = "overdue";
+				if(daysLeft == 0) {
+					badgeSpan.innerHTML = "due today";
+				}
+				else {
+					badgeSpan.innerHTML = "overdue";
+				}
 			}
 			else { // Orange, Yellow, Green; not overdue
 				if(daysLeft <= 3) { // Orange
