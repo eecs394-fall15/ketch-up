@@ -5442,6 +5442,9 @@ a.item-content {
 .tabs .tab-item .badge.badge-balanced, .badge.badge-balanced {
   background-color: #33cd5f;
   color: #fff; }
+.tabs .tab-item .badge.badge-orange, .badge.badge-orange {
+  background-color: #F7881E;
+  color: #fff; }
 .tabs .tab-item .badge.badge-energized, .badge.badge-energized {
   background-color: #ffc900;
   color: #fff; }
@@ -7485,6 +7488,15 @@ a.button {
 
 .assertive-border {
   border-color: #e42012; }
+
+.orange, a.orange {
+  color: #F7881E; }
+
+.orange-bg {
+  background-color: #F7881E; }
+
+.orange-border {
+  border-color: #F7881E; }
 
 .balanced, a.balanced {
   color: #33cd5f; }
