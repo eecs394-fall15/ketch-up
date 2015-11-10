@@ -15,26 +15,41 @@
     <span class="input-label">Name</span>
     <input type="text" placeholder="name or nickname" id="name">
   </label>
-  
+
   <label class="item item-input" id="phoneLabel">
     <span class="input-label">Phone</span>
     <input type="tel" placeholder="(123) 456-7890" id="phone">
   </label>
-  
+
   <label class="item item-input" id="emailLabel">
     <span class="input-label">Email</span>
     <input type="email" placeholder="example@something.com" id="email">
   </label>
 
-  <label class="item item-input" id="intervalLabel">
-    <span class="input-label">Contact Interval</span>
-    <input type="email" placeholder="in days" id="intervalDays">
-  </label>
+  <div class="row contact-interval">
+    <div class="col col-67 interval">
+      <label class="interval-label item item-input" id="intervalLabel">
+        <span class="input-label">Contact interval</span>
+        <input type="number" placeholder="e.g. 6" id="intervalDays">
+      </label>
+    </div>
+
+    <div class="col unit">
+      <label class="unit-label item item-input item-select" id="unitLabel">
+        <span class="input-label">in</span>
+        <select id="unit">
+          <option>Days</option>
+          <option>Weeks</option>
+          <option>Months</option>
+          <option>Years</option>
+        </select>
+      </label>
+    </div>
+  </div>
 
   <label class="item item-input item-select" id="typeLabel">
     <span class="input-label">Contact Type</span>
     <select id="type">
-      <option selected>- SELECT TYPE -</option>
       <option>Friend</option>
       <option>Coworker</option>
       <option>Family</option>

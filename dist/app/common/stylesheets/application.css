@@ -49,23 +49,6 @@
   margin: 0;
 }
 
-#new-camera img {
-  width: 48%;
-}
-
-#new-camera {
-  padding: 3% 1%;
-  text-align: center;
-}
-
-.camera {
-  padding: 1%;
-}
-
-.camera img {
-  width: 100%;
-}
-
 #submitButton {
   width: 80%;
   margin: 15px 10%;
@@ -84,7 +67,7 @@
   font-weight: 600;
 }
 
-#new-card .button { 
+#new-card .button {
   color: #2B74B6;
 }
 
@@ -98,4 +81,29 @@ tab-bar-item#friend {
 
 tab-bar-item#coworker {
   background-image: url(icons/coworkers.png);
+}
+
+.interval, .unit {
+  padding: 0;
+  margin: 0;
+}
+
+.unit, #unit {
+  max-width: 100%;
+  text-indent: 0;
+  right: 0;
+}
+
+.contact-interval {
+  padding: 0;
+  margin: 0;
+}
+
+.interval-label {
+  border-right: transparent;
+}
+
+.unit-label {
+  border-left: transparent;
+  padding-left: 0;
 }
