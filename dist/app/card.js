@@ -185,6 +185,7 @@ angular
 					// Added this to select a default value from the dropdown
 					// NOTE: capitalizeFirstLetter() is NOT built into String, but it is defined as a String prototype in index.js
 					$( "#editType" ).val(result.get("type").capitalizeFirstLetter());
+					$( "#editUnit" ).val(result.get("unit").capitalizeFirstLetter());
 				},
 				error: function(object, error) {
 					alert("Error in EditController: " + error.code + " " + error.message);
@@ -232,6 +233,7 @@ angular
 					card.set("email", email || undefined);
 					card.set("lastCall", lastCall);
 					card.set("interval", parseInt(interval) || undefined);
+					card.set("unit", unit);
 					// Then, close the modal
 					card.save().then(function() {
 						supersonic.ui.modal.hide();
@@ -265,7 +267,6 @@ angular
 		}
 
 		var init = function() {
-
 			// Save all the info into allFamilyCards
 			var ContactsObject = Parse.Object.extend("ketchupData");
 			var query = new Parse.Query(ContactsObject);
@@ -333,7 +334,7 @@ angular
 				else { // Green
 					badgeSpan.setAttribute("class", "badge badge-balanced");
 				}
-				badgeSpan.innerHTML = "call in " + daysLeft;
+				badgeSpan.innerHTML = "call in " + BadgeDaysToUnits(daysLeft);
 			}
 
 			var pName = document.createElement("p");
@@ -344,6 +345,42 @@ angular
 			navigate.appendChild(listElement);
 
 			return navigate;
+		}
+
+		function BadgeDaysToUnits(daysLeft) {
+			var unit = ""
+
+			if(daysLeft < 7) {
+				unit = "day"
+				if(daysLeft != 1) {
+					unit += "s"
+				}
+				return daysLeft + " " + unit
+			}
+			else if(daysLeft < 31) {
+				unit = "week"
+				var weeksLeft = parseInt(daysLeft/7)
+				if(weeksLeft != 1) {
+					unit += "s"
+				}
+				return weeksLeft + " " + unit
+			}
+			else if(daysLeft < 366) {
+				unit = "month"
+				var monthsLeft = parseInt(daysLeft/30)
+				if(monthsLeft != 1) {
+					unit += "s"
+				}
+				return monthsLeft + " " + unit
+			}
+			else {
+				unit = "year"
+				var yearsLeft = parseInt(daysLeft/365)
+				if(yearsLeft != 1) {
+					unit += "s"
+				}
+				return yearsLeft + " " + unit
+			}
 		}
 		
     });
