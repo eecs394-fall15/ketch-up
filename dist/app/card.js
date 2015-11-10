@@ -449,5 +449,12 @@ angular
 				months[lastContact.getMonth()] + " " + lastContact.getDate() + ", " + lastContact.getFullYear() +
 				" at " + lastContact.getHours()%12 + ":" + lastContact.getMinutes() + (lastContact.getHours()>12?" PM":" AM")
 		}
+
+		$scope.CheckIfPlural = function(interval, unit) {
+			if(interval == 1) {
+				return unit.substring(0, unit.length - 1); // Remove last character, which happens to be an s
+			}
+			return unit
+		}
 		
 	});

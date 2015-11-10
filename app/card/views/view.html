@@ -15,7 +15,7 @@
     <p>Phone: <span ng-bind="FormatPhone(card.get('phone'))"></span></p>
     <p>Email: <a href="mailto:{{card.get('email')}}" ng-bind="card.get('email')"></a></p>
     <p>Last Contact: <span ng-bind="FormatDate(card.get('lastCall'))"></span></p>
-    <p>Contact Interval: <span ng-bind="card.get('interval') + ' ' + card.get('unit')"></span></p>
+    <p>Contact Interval: <span ng-bind="card.get('interval') + ' ' + CheckIfPlural(card.get('interval'), card.get('unit'))"></span></p>
 
     <button ng-click="remove(card.id)" class="button button-block button-assertive">
       Remove
