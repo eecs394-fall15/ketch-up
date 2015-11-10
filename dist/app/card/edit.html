@@ -75,13 +75,22 @@
   
     <label class="item item-input" id="intervalLabel">
       <span class="input-label">Contact Interval</span>
-      <input type="email" value={{card.get('intervalDays')}} placeholder="in days" id="editIntervalDays">
+      <input type="tel" value={{card.get('intervalDays')}} placeholder="in days" id="editIntervalDays">
+    </label>
+
+    <label class="item item-input item-select" id="unitLabel" style="border-top: none">
+      <span class="input-label">Interval Unit</span>
+      <select id="editUnit">
+        <option>Days</option>
+        <option>Weeks</option>
+        <option>Months</option>
+        <option>Years</option>
+      </select>
     </label>
 
     <label class="item item-input item-select" id="typeLabel">
       <span class="input-label">Contact Type</span>
       <select id="editType">
-        <option>- SELECT TYPE -</option>
         <option>Friend</option>
         <option>Coworker</option>
         <option>Family</option>
