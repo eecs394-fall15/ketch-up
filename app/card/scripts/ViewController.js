@@ -17,16 +17,30 @@ angular
 		});
 
 		$scope.remove = function(id) {
-			$scope.card.destroy({
-				success: function(myObject) {
-					// The object was deleted from the Parse Cloud.
-					supersonic.ui.layers.pop(); // Go back to previous page
-				},
-				error: function(myObject, error) {
-					alert("Error in ViewController (remove): " + error.code + " " + error.message);
+			var options = {
+			  message: "Are you sure you want to delete this contact?",
+			  buttonLabel: ["Yes.", "No."]
+			};
+
+			supersonic.ui.dialog.confirm("Hold on!", options).then(function(index) {
+				if (index == 0) {
+					$scope.card.destroy({
+						success: function(myObject) {
+							// The object was deleted from the Parse Cloud.
+							supersonic.ui.layers.pop(); // Go back to previous page
+						},
+						error: function(myObject, error) {
+							alert("Error in ViewController (remove): " + error.code + " " + error.message);
+						}
+					});
+			  		
+			  	}
+			  	else {			
+					supersonic.logger.log("Alert closed.");
 				}
 			});
 		}
+
 
 		$scope.OpenEdit = function(card_id) {
 			// Open Edit

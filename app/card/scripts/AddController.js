@@ -10,15 +10,17 @@ angular
 
 			// Save input in variables
 			var typeElement = document.getElementById("type");
+			var unitElement = document.getElementById("unit");
 			var type = typeElement.options[typeElement.selectedIndex].text.toLowerCase();
 			var name = document.getElementById("name").value;
 			var phone = document.getElementById("phone").value;
 			var email = document.getElementById("email").value;
 			var lastCall = new Date();
-			var intervalDays = document.getElementById("intervalDays").value;
+			var interval = document.getElementById("interval").value;
+			var unit = unitElement.options[unitElement.selectedIndex].text.toLowerCase();
 
 			// Perform form validation and mark each incorrect input with a pastel red color
-			var validation = formValidation(name, phone, email, intervalDays, type);
+			var validation = formValidation(name, phone, email, interval, type);
 			var validationOptions = ["name", "phone", "email", "interval", "type"];
 			for(var i = 0; i < validationOptions.length; i++) {
 				if(validationOptions[i].in(validation)) { // NOTE: String.in is NOT part of String; it is defined as a prototype in index.js
@@ -43,7 +45,8 @@ angular
 				phone: parseInt(phone.replace(/[ \(\)-]/g, "")) || undefined,
 				email: email || undefined,
 				lastCall: lastCall,
-				intervalDays: parseInt(intervalDays) || undefined
+				interval: parseInt(interval) || undefined,
+				unit: unit
 			}, {
 				success: function(card) {
 					// The object was saved successfully
