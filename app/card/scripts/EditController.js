@@ -16,6 +16,7 @@ angular
 					// Added this to select a default value from the dropdown
 					// NOTE: capitalizeFirstLetter() is NOT built into String, but it is defined as a String prototype in index.js
 					$( "#editType" ).val(result.get("type").capitalizeFirstLetter());
+					$( "#editUnit" ).val(result.get("unit").capitalizeFirstLetter());
 				},
 				error: function(object, error) {
 					alert("Error in EditController: " + error.code + " " + error.message);
@@ -63,6 +64,7 @@ angular
 					card.set("email", email || undefined);
 					card.set("lastCall", lastCall);
 					card.set("interval", parseInt(interval) || undefined);
+					card.set("unit", unit);
 					// Then, close the modal
 					card.save().then(function() {
 						supersonic.ui.modal.hide();

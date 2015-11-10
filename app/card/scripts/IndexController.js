@@ -16,7 +16,6 @@ angular
 		}
 
 		var init = function() {
-
 			// Save all the info into allFamilyCards
 			var ContactsObject = Parse.Object.extend("ketchupData");
 			var query = new Parse.Query(ContactsObject);
@@ -84,7 +83,7 @@ angular
 				else { // Green
 					badgeSpan.setAttribute("class", "badge badge-balanced");
 				}
-				badgeSpan.innerHTML = "call in " + daysLeft;
+				badgeSpan.innerHTML = "call in " + BadgeDaysToUnits(daysLeft);
 			}
 
 			var pName = document.createElement("p");
@@ -95,6 +94,42 @@ angular
 			navigate.appendChild(listElement);
 
 			return navigate;
+		}
+
+		function BadgeDaysToUnits(daysLeft) {
+			var unit = ""
+
+			if(daysLeft < 7) {
+				unit = "day"
+				if(daysLeft != 1) {
+					unit += "s"
+				}
+				return daysLeft + " " + unit
+			}
+			else if(daysLeft < 31) {
+				unit = "week"
+				var weeksLeft = parseInt(daysLeft/7)
+				if(weeksLeft != 1) {
+					unit += "s"
+				}
+				return weeksLeft + " " + unit
+			}
+			else if(daysLeft < 366) {
+				unit = "month"
+				var monthsLeft = parseInt(daysLeft/30)
+				if(monthsLeft != 1) {
+					unit += "s"
+				}
+				return monthsLeft + " " + unit
+			}
+			else {
+				unit = "year"
+				var yearsLeft = parseInt(daysLeft/365)
+				if(yearsLeft != 1) {
+					unit += "s"
+				}
+				return yearsLeft + " " + unit
+			}
 		}
 		
     });
