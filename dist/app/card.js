@@ -14,9 +14,24 @@ function UTCToDays(utc) {
 	return parseInt(days);
 }
 
-function calculateDaysLeft(lastCall, intervalDays) {
-	var daysElapsedSinceToday = UTCToDays(Date.now() - lastCall);
-	return intervalDays - daysElapsedSinceToday;
+function calculateDaysLeft(lastCall, interval, unit) {
+	var copiedLastCall = new Date(lastCall.getTime()); // Need to do this because JavaScript's pass-by-reference screws everything up
+	// First, convert from units to days, where units∈{days, weeks, months, years}
+	switch(unit) {
+		case "days": // Do nothing
+			break;
+		case "weeks": // Multiply by 7
+			interval = 7*interval;
+			break;
+		case "months": // Do some open-source library magic
+			copiedLastCall.addMonths(interval);
+			break;
+		case "years": // Goto case "months": and read comment
+			copiedLastCall.addMonths(12*interval);
+			break;
+	}
+	var daysElapsedSinceToday = UTCToDays(Date.now() - copiedLastCall);
+	return interval - daysElapsedSinceToday;
 }
 
 // Will return an array with all the form elements that failed. Will return an empty array if all succeeded.
@@ -65,6 +80,31 @@ String.prototype.in = function(arr) {
 	}
 	return false;
 }
+
+// Everything below taken from https://github.com/datejs/Datejs
+Date.isLeapYear = function (year) { 
+    return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)); 
+};
+
+Date.getDaysInMonth = function (year, month) {
+    return [31, (Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+};
+
+Date.prototype.isLeapYear = function () { 
+    return Date.isLeapYear(this.getFullYear()); 
+};
+
+Date.prototype.getDaysInMonth = function () { 
+    return Date.getDaysInMonth(this.getFullYear(), this.getMonth());
+};
+
+Date.prototype.addMonths = function (value) {
+    var n = this.getDate();
+    this.setDate(1);
+    this.setMonth(this.getMonth() + value);
+    this.setDate(Math.min(n, this.getDaysInMonth()));
+    return this;
+};
 angular
 	.module('card')
 	.controller("AddController", function ($scope, supersonic) {
@@ -77,15 +117,17 @@ angular
 
 			// Save input in variables
 			var typeElement = document.getElementById("type");
+			var unitElement = document.getElementById("unit");
 			var type = typeElement.options[typeElement.selectedIndex].text.toLowerCase();
 			var name = document.getElementById("name").value;
 			var phone = document.getElementById("phone").value;
 			var email = document.getElementById("email").value;
 			var lastCall = new Date();
-			var intervalDays = document.getElementById("intervalDays").value;
+			var interval = document.getElementById("interval").value;
+			var unit = unitElement.options[unitElement.selectedIndex].text.toLowerCase();
 
 			// Perform form validation and mark each incorrect input with a pastel red color
-			var validation = formValidation(name, phone, email, intervalDays, type);
+			var validation = formValidation(name, phone, email, interval, type);
 			var validationOptions = ["name", "phone", "email", "interval", "type"];
 			for(var i = 0; i < validationOptions.length; i++) {
 				if(validationOptions[i].in(validation)) { // NOTE: String.in is NOT part of String; it is defined as a prototype in index.js
@@ -110,7 +152,8 @@ angular
 				phone: parseInt(phone.replace(/[ \(\)-]/g, "")) || undefined,
 				email: email || undefined,
 				lastCall: lastCall,
-				intervalDays: parseInt(intervalDays) || undefined
+				interval: parseInt(interval) || undefined,
+				unit: unit
 			}, {
 				success: function(card) {
 					// The object was saved successfully
@@ -153,15 +196,17 @@ angular
 
 			// Save input in variables
 			var typeElement = document.getElementById("editType");
+			var unitElement = document.getElementById("editUnit");
 			var type = typeElement.options[typeElement.selectedIndex].text.toLowerCase();
 			var name = document.getElementById("editName").value;
 			var phone = parseInt(document.getElementById("editPhone").value).toString();
 			var email = document.getElementById("editEmail").value;
 			var lastCall = new Date();
-			var intervalDays = parseInt(document.getElementById("editIntervalDays").value).toString();
+			var interval = parseInt(document.getElementById("editInterval").value).toString();
+			var unit = unitElement.options[unitElement.selectedIndex].text.toLowerCase();
 
 			// Perform form validation and mark each incorrect input with a pastel red color
-			var validation = formValidation(name, phone, email, intervalDays, type);
+			var validation = formValidation(name, phone, email, interval, type);
 			var validationOptions = ["name", "phone", "email", "interval", "type"];
 			for(var i = 0; i < validationOptions.length; i++) {
 				if(validationOptions[i].in(validation)) { // NOTE: String.in is NOT part of String; it is defined as a prototype in index.js
@@ -186,13 +231,14 @@ angular
 					card.set("phone", parseInt(phone.replace(/[ \(\)-]/g, "")) || undefined);
 					card.set("email", email || undefined);
 					card.set("lastCall", lastCall);
-					card.set("intervalDays", parseInt(intervalDays) || undefined);
+					card.set("interval", parseInt(interval) || undefined);
 					// Then, close the modal
 					card.save().then(function() {
 						supersonic.ui.modal.hide();
-					});
-
-					
+					});	
+				},
+				error: function(card, error) {
+					alert("Error in NewController: " + error.code + " " + error.message);
 				}
 			});
 		}
@@ -207,9 +253,8 @@ angular
 
 		$scope.allFamilyCards = undefined;
 		var sortByTimeRemaining = function(e1, e2) {
-			// lastCall, intervalDays
-			var d1 = calculateDaysLeft(e1.get("lastCall"), e1.get("intervalDays"));
-			var d2 = calculateDaysLeft(e2.get("lastCall"), e2.get("intervalDays"));
+			var d1 = calculateDaysLeft(e1.get("lastCall"), e1.get("interval"), e1.get("unit"));
+			var d2 = calculateDaysLeft(e2.get("lastCall"), e2.get("interval"), e2.get("unit"));
 			if(d1 < d2) {
 				return -1;
 			}
@@ -246,7 +291,7 @@ angular
 			for (var i = 0; i < results.length; i++) { // Go through all rows in database, but only append if it matches the URL id (friend, family, or coworker)
 				// Append row as list element
 				if(getURLParameter("type") == results[i].get("type")) {
-					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("intervalDays")));
+					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("interval"), results[i].get("unit")));
 				}
 			}
 			// Once it's done, overwrite the page's contents.
@@ -260,14 +305,14 @@ angular
 		//      <span class="badge badge-assertive">N</span>
 		// 	</div>
 		// </super-navigate>
-		var CreateListElement = function(objectId, name, lastCall, intervalDays) {
+		var CreateListElement = function(objectId, name, lastCall, interval, unit) {
 			var navigate = document.createElement("super-navigate");
 			navigate.setAttribute("location", "card#view?id=" + objectId);
 
 			var listElement = document.createElement("div");
 			listElement.setAttribute("class", "item");
 
-			var daysLeft = calculateDaysLeft(lastCall, intervalDays);
+			var daysLeft = calculateDaysLeft(lastCall, interval, unit);
 			var badgeSpan = document.createElement("span");
 			if(daysLeft <= 0) { // Red; overdue or due today
 				badgeSpan.setAttribute("class", "badge badge-assertive");

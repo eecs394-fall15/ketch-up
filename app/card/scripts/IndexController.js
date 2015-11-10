@@ -4,9 +4,8 @@ angular
 
 		$scope.allFamilyCards = undefined;
 		var sortByTimeRemaining = function(e1, e2) {
-			// lastCall, intervalDays
-			var d1 = calculateDaysLeft(e1.get("lastCall"), e1.get("intervalDays"));
-			var d2 = calculateDaysLeft(e2.get("lastCall"), e2.get("intervalDays"));
+			var d1 = calculateDaysLeft(e1.get("lastCall"), e1.get("interval"), e1.get("unit"));
+			var d2 = calculateDaysLeft(e2.get("lastCall"), e2.get("interval"), e2.get("unit"));
 			if(d1 < d2) {
 				return -1;
 			}
@@ -43,7 +42,7 @@ angular
 			for (var i = 0; i < results.length; i++) { // Go through all rows in database, but only append if it matches the URL id (friend, family, or coworker)
 				// Append row as list element
 				if(getURLParameter("type") == results[i].get("type")) {
-					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("intervalDays")));
+					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("interval"), results[i].get("unit")));
 				}
 			}
 			// Once it's done, overwrite the page's contents.
@@ -57,14 +56,14 @@ angular
 		//      <span class="badge badge-assertive">N</span>
 		// 	</div>
 		// </super-navigate>
-		var CreateListElement = function(objectId, name, lastCall, intervalDays) {
+		var CreateListElement = function(objectId, name, lastCall, interval, unit) {
 			var navigate = document.createElement("super-navigate");
 			navigate.setAttribute("location", "card#view?id=" + objectId);
 
 			var listElement = document.createElement("div");
 			listElement.setAttribute("class", "item");
 
-			var daysLeft = calculateDaysLeft(lastCall, intervalDays);
+			var daysLeft = calculateDaysLeft(lastCall, interval, unit);
 			var badgeSpan = document.createElement("span");
 			if(daysLeft <= 0) { // Red; overdue or due today
 				badgeSpan.setAttribute("class", "badge badge-assertive");

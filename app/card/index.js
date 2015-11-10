@@ -14,9 +14,24 @@ function UTCToDays(utc) {
 	return parseInt(days);
 }
 
-function calculateDaysLeft(lastCall, intervalDays) {
-	var daysElapsedSinceToday = UTCToDays(Date.now() - lastCall);
-	return intervalDays - daysElapsedSinceToday;
+function calculateDaysLeft(lastCall, interval, unit) {
+	var copiedLastCall = new Date(lastCall.getTime()); // Need to do this because JavaScript's pass-by-reference screws everything up
+	// First, convert from units to days, where units∈{days, weeks, months, years}
+	switch(unit) {
+		case "days": // Do nothing
+			break;
+		case "weeks": // Multiply by 7
+			interval = 7*interval;
+			break;
+		case "months": // Do some open-source library magic
+			copiedLastCall.addMonths(interval);
+			break;
+		case "years": // Goto case "months": and read comment
+			copiedLastCall.addMonths(12*interval);
+			break;
+	}
+	var daysElapsedSinceToday = UTCToDays(Date.now() - copiedLastCall);
+	return interval - daysElapsedSinceToday;
 }
 
 // Will return an array with all the form elements that failed. Will return an empty array if all succeeded.
@@ -65,3 +80,28 @@ String.prototype.in = function(arr) {
 	}
 	return false;
 }
+
+// Everything below taken from https://github.com/datejs/Datejs
+Date.isLeapYear = function (year) { 
+    return (((year % 4 === 0) && (year % 100 !== 0)) || (year % 400 === 0)); 
+};
+
+Date.getDaysInMonth = function (year, month) {
+    return [31, (Date.isLeapYear(year) ? 29 : 28), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][month];
+};
+
+Date.prototype.isLeapYear = function () { 
+    return Date.isLeapYear(this.getFullYear()); 
+};
+
+Date.prototype.getDaysInMonth = function () { 
+    return Date.getDaysInMonth(this.getFullYear(), this.getMonth());
+};
+
+Date.prototype.addMonths = function (value) {
+    var n = this.getDate();
+    this.setDate(1);
+    this.setMonth(this.getMonth() + value);
+    this.setDate(Math.min(n, this.getDaysInMonth()));
+    return this;
+};
