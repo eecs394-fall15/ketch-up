@@ -68,6 +68,8 @@ function formValidation(name, phone, email, interval, type) {
 	return result;
 }
 
+// Some String prototypes that are used throughout the app
+
 String.prototype.capitalizeFirstLetter = function() {
     return this=="" ? "" : this.charAt(0).toUpperCase() + this.slice(1);
 }
@@ -441,13 +443,28 @@ angular
 			return str;
 		}
 
-		// Tue Nov 03 2015 11:18:07 GMT-0600 (CST)
-		var weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+		$scope.UpdateLastContact = function() {
+			$scope.card.save(null, {
+				success: function(card) {
+					card.set("lastCall", new Date());
+					card.save()
+				},
+				error: function(card, error) {
+					alert("Error in ViewController: " + error.code + " " + error.message);
+				}
+			});
+		}
+
+		var weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 		var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 		$scope.FormatDate = function(lastContact) {
-			return weekDays[lastContact.getDay()] + ", " +
-				months[lastContact.getMonth()] + " " + lastContact.getDate() + ", " + lastContact.getFullYear() +
-				" at " + lastContact.getHours()%12 + ":" + lastContact.getMinutes() + (lastContact.getHours()>12?" PM":" AM")
+			var weekDay = weekDays[lastContact.getDay()]
+			var month = months[lastContact.getMonth()]
+			var day = lastContact.getDate()
+			var year = lastContact.getFullYear()
+			var hours = lastContact.getHours()%12
+			var minutes = lastContact.getMinutes()
+			return weekDay + ", " + month + " " + day + ", " + year + " at " + hours + ":" + (minutes<10?"0"+minutes:minutes) + (hours>12?" PM":" AM")
 		}
 
 		$scope.CheckIfPlural = function(interval, unit) {

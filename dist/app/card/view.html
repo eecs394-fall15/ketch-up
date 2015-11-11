@@ -51,10 +51,12 @@
 
   </super-navbar>
 
+  <!--  -->
+
   <div class="padding">
     <h2 ng-bind="card.get('name')" id="TEST"></h2>
-    <p>Phone: <span ng-bind="FormatPhone(card.get('phone'))"></span></p>
-    <p>Email: <a href="mailto:{{card.get('email')}}" ng-bind="card.get('email')"></a></p>
+    <p>Phone: <a ng-click="UpdateLastContact()" href="tel:{{card.get('phone')}}" ng-bind="FormatPhone(card.get('phone'))"></a href=""></p>
+    <p>Email: <a ng-click="UpdateLastContact()" href="mailto:{{card.get('email')}}" ng-bind="card.get('email')"></a></p>
     <p>Last Contact: <span ng-bind="FormatDate(card.get('lastCall'))"></span></p>
     <p>Contact Interval: <span ng-bind="card.get('interval') + ' ' + CheckIfPlural(card.get('interval'), card.get('unit'))"></span></p>
 

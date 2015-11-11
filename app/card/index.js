@@ -68,6 +68,8 @@ function formValidation(name, phone, email, interval, type) {
 	return result;
 }
 
+// Some String prototypes that are used throughout the app
+
 String.prototype.capitalizeFirstLetter = function() {
     return this=="" ? "" : this.charAt(0).toUpperCase() + this.slice(1);
 }
