@@ -40,7 +40,7 @@ angular
 
 			for (var i = 0; i < results.length; i++) { // Go through all rows in database, but only append if it matches the URL id (friend, family, or coworker)
 				// Append row as list element
-				if(getURLParameter("type") == results[i].get("type")) {
+				if(getURLParameter("type") == results[i].get("type") || getURLParameter("type") == "all") {
 					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("interval"), results[i].get("unit")));
 				}
 			}

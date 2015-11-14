@@ -83,3 +83,7 @@ tab-bar-item#friend {
 tab-bar-item#coworker {
   background-image: url(icons/coworkers.png);
 }
+
+tab-bar-item#all {
+  background-image: url(icons/all.png);
+}

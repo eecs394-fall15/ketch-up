@@ -16,18 +16,24 @@
   "tabs": [
     {
       "position": 0,
+      "id": "all",
+      "title": "All",
+      "target_url": "http://localhost/app/card/index.html?type=all"
+    },
+    {
+      "position": 1,
       "id": "friend",
       "title": "Friends",
       "target_url": "http://localhost/app/card/index.html?type=friend"
     },
     {
-      "position": 1,
+      "position": 2,
       "id": "coworker",
       "title": "Coworkers",
       "target_url": "http://localhost/app/card/index.html?type=coworker"
     },
     {
-      "position": 2,
+      "position": 3,
       "id": "family",
       "title": "Family",
       "target_url": "http://localhost/app/card/index.html?type=family"
