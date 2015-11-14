@@ -36,7 +36,8 @@ angular
 		});
 
 		function GenerateList(results) {
-			var list = document.createElement("ul");
+			var list = document.getElementById("list");
+			list.innerHTML = "";
 
 			for (var i = 0; i < results.length; i++) { // Go through all rows in database, but only append if it matches the URL id (friend, family, or coworker)
 				// Append row as list element
@@ -44,57 +45,134 @@ angular
 					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("interval"), results[i].get("unit")));
 				}
 			}
-			// Once it's done, overwrite the page's contents.
-			// Note how this is done at the end, to avoid getting a blank screen while the data loads.
-			document.getElementById("list").innerHTML = list.innerHTML;
+			// Once it's done, recompile angular module to allow the ng-clicks to work.
+			var el = angular.element(list);
+			$scope = el.scope();
+			$injector = el.injector();
+			$injector.invoke(function($compile){
+				$compile(el)($scope)
+			})
 		}
 
-		// <super-navigate location="card#view?id=ID">
-		// 	<div class="item" href="#">
-		//      <p>Test Name</p>
-		//      <span class="badge badge-assertive">N</span>
-		// 	</div>
-		// </super-navigate>
-		var CreateListElement = function(objectId, name, lastCall, interval, unit) {
-			var navigate = document.createElement("super-navigate");
-			navigate.setAttribute("location", "card#view?id=" + objectId);
+		$scope.alert = function(str) { alert(str); }
 
-			var listElement = document.createElement("div");
-			listElement.setAttribute("class", "item");
+		// <div>
+		// 	<div class="item item-icon-right">
+		// 		<p ng-click="ExpandMenu(ID)">Test Name</p>
+		// 		<span class="badge badge-assertive" style="margin-right:20px">N</span>
+		// 		<i class="icon super-ios-telephone-outline"></i>
+		// 	</div>
+		// 	<div class="item" id="ID" style="display:none; border-top:none; padding:0">
+		// 		<div class="button-bar">
+		// 			<a class="button button-light" style="border-bottom:0" ng-click=Postpone(ID)>Postpone</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click=Reset(ID)>Reset Counter</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click=Edit(ID)>Edit Contact</a>
+		// 		</div>
+		// 	</div>
+		// </div>
+		var CreateListElement = function(objectId, name, lastCall, interval, unit) {
+			var mainDiv = document.createElement("div");
+
+			// For <div class="item item-icon-right" href="#">
+			var listDiv = document.createElement("div");
+			listDiv.setAttribute("class", "item item-icon-right");
+
+			var contactName = document.createElement("p");
+			contactName.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
+			contactName.innerHTML = name || "";
+			listDiv.appendChild(contactName);
 
 			var daysLeft = calculateDaysLeft(lastCall, interval, unit);
-			var badgeSpan = document.createElement("span");
+			var badge = document.createElement("span");
+			badge.style.marginRight = "20px";
 			if(daysLeft <= 0) { // Red; overdue or due today
-				badgeSpan.setAttribute("class", "badge badge-assertive");
+				badge.setAttribute("class", "badge badge-assertive");
 				if(daysLeft == 0) {
-					badgeSpan.innerHTML = "due today";
+					badge.innerHTML = "due today";
 				}
 				else {
-					badgeSpan.innerHTML = "overdue";
+					badge.innerHTML = "overdue";
 				}
 			}
 			else { // Orange, Yellow, Green; not overdue
 				if(daysLeft <= 3) { // Orange
-					badgeSpan.setAttribute("class", "badge badge-orange");
+					badge.setAttribute("class", "badge badge-orange");
 				}
 				else if(daysLeft <= 7) { // Yellow
-					badgeSpan.setAttribute("class", "badge badge-energized");
+					badge.setAttribute("class", "badge badge-energized");
 				}
 				else { // Green
-					badgeSpan.setAttribute("class", "badge badge-balanced");
+					badge.setAttribute("class", "badge badge-balanced");
 				}
-				badgeSpan.innerHTML = "call in " + BadgeDaysToUnits(daysLeft);
+				badge.innerHTML = "call in " + BadgeDaysToUnits(daysLeft);
 			}
+			listDiv.appendChild(badge);
 
-			var pName = document.createElement("p");
-			pName.innerHTML = name || "";
+			var callIcon = document.createElement("i");
+			callIcon.setAttribute("class", "icon super-ios-telephone-outline")
+			listDiv.appendChild(callIcon);
 
-			listElement.appendChild(badgeSpan);
-			listElement.appendChild(pName);
-			navigate.appendChild(listElement);
+			// For <div class="item" id="slide" style="display:none; border-top:none; padding:0">
+			var menuDiv = document.createElement("div");
+			menuDiv.setAttribute("class", "item");
+			menuDiv.id = objectId;
+			menuDiv.style.display = "none";
+			menuDiv.style.borderTop = "none";
+			menuDiv.style.padding = "0";
 
-			return navigate;
+			var buttonBar = document.createElement("div")
+			buttonBar.setAttribute("class", "button-bar");
+			menuDiv.appendChild(buttonBar);
+
+			var postpone = document.createElement("a");
+			postpone.setAttribute("class", "button button-light");
+			postpone.style.borderBottom = "0";
+			postpone.setAttribute("ng-click", "Postpone('" + objectId + "')");
+			postpone.innerHTML = "Postpone";
+			buttonBar.appendChild(postpone);
+
+			var reset = document.createElement("a");
+			reset.setAttribute("class", "button button-light");
+			reset.style.borderBottom = "0";
+			reset.setAttribute("ng-click", "Reset('" + objectId + "')");
+			reset.innerHTML = "Reset Counter";
+			buttonBar.appendChild(reset);
+
+			var edit = document.createElement("a");
+			edit.setAttribute("class", "button button-light");
+			edit.style.borderBottom = "0";
+			edit.setAttribute("ng-click", "Edit('" + objectId + "')");
+			edit.innerHTML = "Edit Contact";
+			buttonBar.appendChild(edit);
+
+			mainDiv.appendChild(listDiv);
+			mainDiv.appendChild(menuDiv);
+
+			return mainDiv
 		}
+
+		$scope.ExpandMenu = function(id) {
+			var blockDisplaySetting = $( "#" + id ).css("display")
+			if(blockDisplaySetting == "none") {
+				$( "#" + id ).slideDown("medium");
+			}
+			else {
+				$( "#" + id ).slideUp("medium");
+			}
+		}
+
+		$scope.Postpone = function(id) {
+
+		}
+
+		$scope.Reset = function(id) {
+			
+		}
+
+		$scope.Edit = function(id) {
+			
+		}
+
 
 		function BadgeDaysToUnits(daysLeft) {
 			var unit = ""
