@@ -3,6 +3,7 @@ angular
 	.controller("IndexController", function ($scope, supersonic) {
 
 		$scope.allFamilyCards = undefined;
+
 		var sortByTimeRemaining = function(e1, e2) {
 			var d1 = calculateDaysLeft(e1.get("lastCall"), e1.get("interval"), e1.get("unit"));
 			var d2 = calculateDaysLeft(e2.get("lastCall"), e2.get("interval"), e2.get("unit"));
@@ -13,6 +14,12 @@ angular
 				return 1;
 			}
 			return 0;
+		}
+
+		function findId(id) {
+			return $scope.allFamilyCards.find(function(e) {
+				return e.id == id
+			})
 		}
 
 		var init = function() {
@@ -60,7 +67,7 @@ angular
 		// 	<div class="item item-icon-right">
 		// 		<p ng-click="ExpandMenu(ID)">Test Name</p>
 		// 		<span class="badge badge-assertive" style="margin-right:20px">N</span>
-		// 		<i class="icon super-ios-telephone-outline"></i>
+		// 		<i class="icon super-ios-telephone-outline" ng-click"CallNumber(ID)"></i>
 		// 	</div>
 		// 	<div class="item" id="ID" style="display:none; border-top:none; padding:0">
 		// 		<div class="button-bar">
@@ -109,7 +116,8 @@ angular
 			listDiv.appendChild(badge);
 
 			var callIcon = document.createElement("i");
-			callIcon.setAttribute("class", "icon super-ios-telephone-outline")
+			callIcon.setAttribute("class", "icon super-ios-telephone-outline");
+			callIcon.setAttribute("ng-click", "CallNumber('" + objectId + "')")
 			listDiv.appendChild(callIcon);
 
 			// For <div class="item" id="slide" style="display:none; border-top:none; padding:0">
@@ -124,26 +132,18 @@ angular
 			buttonBar.setAttribute("class", "button-bar");
 			menuDiv.appendChild(buttonBar);
 
-			var postpone = document.createElement("a");
-			postpone.setAttribute("class", "button button-light");
-			postpone.style.borderBottom = "0";
-			postpone.setAttribute("ng-click", "Postpone('" + objectId + "')");
-			postpone.innerHTML = "Postpone";
-			buttonBar.appendChild(postpone);
+			var CreateButton = function(functionName, innerHTML) {
+				var button = document.createElement("a");
+				button.setAttribute("class", "button button-light");
+				button.style.borderBottom = "0";
+				button.setAttribute("ng-click", functionName + "('" + objectId + "')");
+				button.innerHTML = innerHTML;
+				return button;
+			}
 
-			var reset = document.createElement("a");
-			reset.setAttribute("class", "button button-light");
-			reset.style.borderBottom = "0";
-			reset.setAttribute("ng-click", "Reset('" + objectId + "')");
-			reset.innerHTML = "Reset Counter";
-			buttonBar.appendChild(reset);
-
-			var edit = document.createElement("a");
-			edit.setAttribute("class", "button button-light");
-			edit.style.borderBottom = "0";
-			edit.setAttribute("ng-click", "Edit('" + objectId + "')");
-			edit.innerHTML = "Edit Contact";
-			buttonBar.appendChild(edit);
+			buttonBar.appendChild(CreateButton("Postpone", "Postpone"));
+			buttonBar.appendChild(CreateButton("Reset", "Reset Counter"));
+			buttonBar.appendChild(CreateButton("Edit", "Edit Contact"));
 
 			mainDiv.appendChild(listDiv);
 			mainDiv.appendChild(menuDiv);
@@ -161,18 +161,29 @@ angular
 			}
 		}
 
-		$scope.Postpone = function(id) {
+		$scope.CallNumber = function(id) {
+			var phoneNumber = findId(id).get("phone");
+			if(phoneNumber) {
+				window.location = "tel:" + phoneNumber;
+			}
+			else {
+				supersonic.ui.dialog.alert("No Phone Number",
+					{message: "This contact does not have a phone number associated with it."}
+				);
+			}
+		}
 
+		$scope.Postpone = function(id) {
+			alert("Postpone not implemented yet.")
 		}
 
 		$scope.Reset = function(id) {
-			
+			alert("Reset not implemented yet.")
 		}
 
 		$scope.Edit = function(id) {
-			
+			alert("Edit not implemented yet.")
 		}
-
 
 		function BadgeDaysToUnits(daysLeft) {
 			var unit = ""
