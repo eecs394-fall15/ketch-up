@@ -3,10 +3,6 @@ angular
 	.controller('EditController', function($scope, supersonic) {
 		$scope.card;
 
-		$scope.cancel = function () {
-			supersonic.ui.modal.hide();
-		};
-
 		supersonic.ui.views.current.whenVisible( function() {
 			var ContactsObject = Parse.Object.extend("ketchupData");
 			var query = new Parse.Query(ContactsObject);
@@ -67,7 +63,7 @@ angular
 					card.set("unit", unit);
 					// Then, close the modal
 					card.save().then(function() {
-						supersonic.ui.modal.hide();
+						supersonic.ui.layers.pop();
 					});	
 				},
 				error: function(card, error) {
@@ -76,6 +72,29 @@ angular
 			});
 		}
 
+		$scope.remove = function(id) {
+			var options = {
+			  message: "Are you sure you want to delete this contact?",
+			  buttonLabel: ["Yes.", "No."]
+			};
 
+			supersonic.ui.dialog.confirm("Hold on!", options).then(function(index) {
+				if (index == 0) {
+					$scope.card.destroy({
+						success: function(myObject) {
+							// The object was deleted from the Parse Cloud.
+							supersonic.ui.layers.pop(); // Go back to previous page
+						},
+						error: function(myObject, error) {
+							alert("Error in ViewController (remove): " + error.code + " " + error.message);
+						}
+					});
+			  		
+			  	}
+			  	else {			
+					supersonic.logger.log("Alert closed.");
+				}
+			});
+		}
 
 	});

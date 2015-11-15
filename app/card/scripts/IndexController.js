@@ -72,7 +72,7 @@ angular
 		// 	<div class="item" id="ID" style="display:none; border-top:none; padding:0">
 		// 		<div class="button-bar">
 		// 			<a class="button button-light" style="border-bottom:0" ng-click=Postpone(ID)>Postpone</a>
-		// 			<a class="button button-light" style="border-bottom:0" ng-click=Reset(ID)>Reset Counter</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click=Reset(ID)>Caught Up</a>
 		// 			<a class="button button-light" style="border-bottom:0" ng-click=Edit(ID)>Edit Contact</a>
 		// 		</div>
 		// 	</div>
@@ -142,7 +142,7 @@ angular
 			}
 
 			buttonBar.appendChild(CreateButton("Postpone", "Postpone"));
-			buttonBar.appendChild(CreateButton("Reset", "Reset Counter"));
+			buttonBar.appendChild(CreateButton("Reset", "Caught Up"));
 			buttonBar.appendChild(CreateButton("Edit", "Edit Contact"));
 
 			mainDiv.appendChild(listDiv);
@@ -165,6 +165,7 @@ angular
 			var phoneNumber = findId(id).get("phone");
 			if(phoneNumber) {
 				window.location = "tel:" + phoneNumber;
+				$scope.Reset(id);
 			}
 			else {
 				supersonic.ui.dialog.alert("No Phone Number",
@@ -178,11 +179,21 @@ angular
 		}
 
 		$scope.Reset = function(id) {
-			alert("Reset not implemented yet.")
+			findId(id).save(null, {
+				success: function(card) {
+					card.set("lastCall", new Date());
+					card.save().then(
+						init();
+					)
+				},
+				error: function(card, error) {
+					alert("Error in ViewController: " + error.code + " " + error.message);
+				}
+			});
 		}
 
 		$scope.Edit = function(id) {
-			alert("Edit not implemented yet.")
+			supersonic.ui.layers.push(new supersonic.ui.View("card#edit?id=" + id));
 		}
 
 		function BadgeDaysToUnits(daysLeft) {

@@ -174,10 +174,6 @@ angular
 	.controller('EditController', function($scope, supersonic) {
 		$scope.card;
 
-		$scope.cancel = function () {
-			supersonic.ui.modal.hide();
-		};
-
 		supersonic.ui.views.current.whenVisible( function() {
 			var ContactsObject = Parse.Object.extend("ketchupData");
 			var query = new Parse.Query(ContactsObject);
@@ -238,7 +234,7 @@ angular
 					card.set("unit", unit);
 					// Then, close the modal
 					card.save().then(function() {
-						supersonic.ui.modal.hide();
+						supersonic.ui.layers.pop();
 					});	
 				},
 				error: function(card, error) {
@@ -247,7 +243,30 @@ angular
 			});
 		}
 
+		$scope.remove = function(id) {
+			var options = {
+			  message: "Are you sure you want to delete this contact?",
+			  buttonLabel: ["Yes.", "No."]
+			};
 
+			supersonic.ui.dialog.confirm("Hold on!", options).then(function(index) {
+				if (index == 0) {
+					$scope.card.destroy({
+						success: function(myObject) {
+							// The object was deleted from the Parse Cloud.
+							supersonic.ui.layers.pop(); // Go back to previous page
+						},
+						error: function(myObject, error) {
+							alert("Error in ViewController (remove): " + error.code + " " + error.message);
+						}
+					});
+			  		
+			  	}
+			  	else {			
+					supersonic.logger.log("Alert closed.");
+				}
+			});
+		}
 
 	});
 
@@ -325,7 +344,7 @@ angular
 		// 	<div class="item" id="ID" style="display:none; border-top:none; padding:0">
 		// 		<div class="button-bar">
 		// 			<a class="button button-light" style="border-bottom:0" ng-click=Postpone(ID)>Postpone</a>
-		// 			<a class="button button-light" style="border-bottom:0" ng-click=Reset(ID)>Reset Counter</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click=Reset(ID)>Caught Up</a>
 		// 			<a class="button button-light" style="border-bottom:0" ng-click=Edit(ID)>Edit Contact</a>
 		// 		</div>
 		// 	</div>
@@ -395,7 +414,7 @@ angular
 			}
 
 			buttonBar.appendChild(CreateButton("Postpone", "Postpone"));
-			buttonBar.appendChild(CreateButton("Reset", "Reset Counter"));
+			buttonBar.appendChild(CreateButton("Reset", "Caught Up"));
 			buttonBar.appendChild(CreateButton("Edit", "Edit Contact"));
 
 			mainDiv.appendChild(listDiv);
@@ -418,6 +437,7 @@ angular
 			var phoneNumber = findId(id).get("phone");
 			if(phoneNumber) {
 				window.location = "tel:" + phoneNumber;
+				$scope.Reset(id);
 			}
 			else {
 				supersonic.ui.dialog.alert("No Phone Number",
@@ -431,11 +451,21 @@ angular
 		}
 
 		$scope.Reset = function(id) {
-			alert("Reset not implemented yet.")
+			findId(id).save(null, {
+				success: function(card) {
+					card.set("lastCall", new Date());
+					card.save().then(
+						init();
+					)
+				},
+				error: function(card, error) {
+					alert("Error in ViewController: " + error.code + " " + error.message);
+				}
+			});
 		}
 
 		$scope.Edit = function(id) {
-			alert("Edit not implemented yet.")
+			supersonic.ui.layers.push(new supersonic.ui.View("card#edit?id=" + id));
 		}
 
 		function BadgeDaysToUnits(daysLeft) {
