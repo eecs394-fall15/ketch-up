@@ -179,9 +179,9 @@ angular
 			findId(id).save(null, {
 				success: function(card) {
 					card.set("lastCall", new Date());
-					card.save().then(
+					card.save().then(function() {
 						init()
-					)
+					})
 				},
 				error: function(card, error) {
 					alert("Error in ViewController: " + error.code + " " + error.message);

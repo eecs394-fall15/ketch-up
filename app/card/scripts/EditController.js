@@ -29,9 +29,10 @@ angular
 			var name = document.getElementById("editName").value;
 			var phone = parseInt(document.getElementById("editPhone").value).toString();
 			var email = document.getElementById("editEmail").value;
-			var lastCall = new Date();
 			var interval = parseInt(document.getElementById("editInterval").value).toString();
 			var unit = unitElement.options[unitElement.selectedIndex].text.toLowerCase();
+			var lastCall = $scope.card.get("interval") == interval && $scope.card.get("unit") == unit ?
+				$scope.card.get("lastCall") : new Date(); // Update last call only if interval was changed
 
 			// Perform form validation and mark each incorrect input with a pastel red color
 			var validation = formValidation(name, phone, email, interval, type);
