@@ -336,14 +336,16 @@ angular
 		// <div>
 		// 	<div class="item item-icon-right">
 		// 		<p ng-click="ExpandMenu(ID)">Test Name</p>
-		// 		<span class="badge badge-assertive" style="margin-right:20px">N</span>
-		// 		<i class="icon super-ios-telephone-outline" ng-click"CallNumber(ID)"></i>
+		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px">N</span>
+		//		<i class="icon super-ios-email-outline" id="ID_email" style="display: none" ng-click="ComposeMail(ID)"></i>
+		//		<i class="icon super-ios-chatbubble-outline" id="ID_text" style="display: none; margin-right: 40px" ng-click="TextNumber(ID)"></i>
+		// 		<i class="icon super-ios-telephone-outline" id="ID_phone" ng-click="CallNumber(ID)"></i>
 		// 	</div>
 		// 	<div class="item" id="ID" style="display:none; border-top:none; padding:0">
 		// 		<div class="button-bar">
-		// 			<a class="button button-light" style="border-bottom:0" ng-click=Postpone(ID)>Postpone</a>
-		// 			<a class="button button-light" style="border-bottom:0" ng-click=Reset(ID)>Caught Up</a>
-		// 			<a class="button button-light" style="border-bottom:0" ng-click=Edit(ID)>Edit Contact</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click="Postpone(ID)">Postpone</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click="Reset(ID)">Caught Up</a>
+		// 			<a class="button button-light" style="border-bottom:0" ng-click="Edit(ID)">Edit Contact</a>
 		// 		</div>
 		// 	</div>
 		// </div>
@@ -361,6 +363,7 @@ angular
 
 			var daysLeft = calculateDaysLeft(lastCall, interval, unit);
 			var badge = document.createElement("span");
+			badge.id = objectId + "_badge"
 			badge.style.marginRight = "20px";
 			if(daysLeft <= 0) { // Red; overdue or due today
 				badge.setAttribute("class", "badge badge-assertive");
@@ -385,12 +388,32 @@ angular
 			}
 			listDiv.appendChild(badge);
 
+		//		<i class="icon super-ios-email-outline" id="ID_email" style="display: none" ng-click="ComposeMail(ID)"></i>
+		//		<i class="icon super-ios-chatbubble-outline" id="ID_text" style="display: none; margin-right: 40px" ng-click="TextNumber(ID)"></i>
+		// 		<i class="icon super-ios-telephone-outline" id="ID_phone" ng-click="CallNumber(ID)"></i>
+
+			var emailIcon = document.createElement("i");
+			emailIcon.setAttribute("class", "icon super-ios-email-outline");
+			emailIcon.id = objectId + "_email";
+			emailIcon.style.display = "none";
+			emailIcon.setAttribute("ng-click", "ComposeMail('" + objectId + "')");
+			listDiv.appendChild(emailIcon);
+
+			var textIcon = document.createElement("i");
+			textIcon.setAttribute("class", "icon super-ios-chatbubble-outline");
+			textIcon.id = objectId + "_text";
+			textIcon.style.display = "none";
+			textIcon.style.marginRight = "40px";
+			textIcon.setAttribute("ng-click", "TextNumber('" + objectId + "')");
+			listDiv.appendChild(textIcon);
+
 			var callIcon = document.createElement("i");
 			callIcon.setAttribute("class", "icon super-ios-telephone-outline");
+			callIcon.id = objectId + "_call";
 			callIcon.setAttribute("ng-click", "CallNumber('" + objectId + "')")
 			listDiv.appendChild(callIcon);
 
-			// For <div class="item" id="slide" style="display:none; border-top:none; padding:0">
+			// For <div class="item" id="ID" style="display:none; border-top:none; padding:0">
 			var menuDiv = document.createElement("div");
 			menuDiv.setAttribute("class", "item");
 			menuDiv.id = objectId;
@@ -425,9 +448,21 @@ angular
 			var blockDisplaySetting = $( "#" + id ).css("display")
 			if(blockDisplaySetting == "none") {
 				$( "#" + id ).slideDown("medium");
+				$( "#" + id + "_badge" ).fadeOut("medium");
+				$( "#" + id + "_call" ).animate({
+					marginRight: "80px"
+				}, 500);
+				$( "#" + id + "_text").fadeIn("slow");
+				$( "#" + id + "_email").fadeIn("medium");
 			}
 			else {
 				$( "#" + id ).slideUp("medium");
+				$( "#" + id + "_badge" ).fadeIn("medium");
+				$( "#" + id + "_call" ).animate({
+					marginRight: ""
+				}, 500);
+				$( "#" + id + "_text").fadeOut("slow");
+				$( "#" + id + "_email").fadeOut("medium");
 			}
 		}
 
@@ -440,6 +475,32 @@ angular
 			else {
 				supersonic.ui.dialog.alert("No Phone Number",
 					{message: "This contact does not have a phone number associated with it."}
+				);
+			}
+		}
+
+		$scope.TextNumber = function(id) {
+			var phoneNumber = findId(id).get("phone");
+			if(phoneNumber) {
+				window.location = "sms:" + phoneNumber;
+				$scope.Reset(id);
+			}
+			else {
+				supersonic.ui.dialog.alert("No Phone Number",
+					{message: "This contact does not have a phone number associated with it."}
+				);
+			}
+		}
+
+		$scope.ComposeMail = function(id) {
+			var email = findId(id).get("email");
+			if(email) {
+				window.location = "mailto:" + email;
+				$scope.Reset(id);
+			}
+			else {
+				supersonic.ui.dialog.alert("No Email",
+					{message: "This contact does not have an email address associated with it."}
 				);
 			}
 		}
