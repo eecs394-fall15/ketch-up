@@ -1,7 +1,6 @@
 angular
 	.module('card')
 	.controller("IndexController", function ($scope, supersonic) {
-
 		$scope.allFamilyCards = undefined;
 
 		var sortByTimeRemaining = function(e1, e2) {
@@ -60,8 +59,6 @@ angular
 				$compile(el)($scope)
 			})
 		}
-
-		$scope.alert = function(str) { alert(str); }
 
 		// <div>
 		// 	<div class="item item-icon-right">
@@ -183,7 +180,7 @@ angular
 				success: function(card) {
 					card.set("lastCall", new Date());
 					card.save().then(
-						init();
+						init()
 					)
 				},
 				error: function(card, error) {
