@@ -355,6 +355,7 @@ angular
 			// For <div class="item item-icon-right" href="#">
 			var listDiv = document.createElement("div");
 			listDiv.setAttribute("class", "item item-icon-right");
+			listDiv.style.height = "80px";
 
 			var contactName = document.createElement("p");
 			contactName.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");

@@ -71,6 +71,24 @@
   color: #2B74B6;
 }
 
+table {
+  width: 100%;
+}
+.ketchupHeader {
+  background-color: #c4d1d0;
+  color: white;
+  font-weight: bold;
+}
+
+#nameCol {
+  padding-left: 4%;
+  padding-right: 30px;
+  width: 70%;
+}
+#callCol {
+  width: 30%;
+}
+
 tab-bar-item#family {
   background-image: url(icons/family.png);
 }
