@@ -358,6 +358,7 @@ angular
 
 			var contactName = document.createElement("p");
 			contactName.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
+			contactName.style.fontSize = "19px";
 			contactName.innerHTML = name || "";
 			listDiv.appendChild(contactName);
 
