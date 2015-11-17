@@ -8,8 +8,36 @@
 		</super-navbar-title>
 	</super-navbar>
 
+	<style type="text/css">
+		table {
+			width: 100%;
+		}
+		.tableHeader {
+		  background-color: #7a7a7a;
+		  color: white;
+		  font-weight: bold;
+		}
+
+		#nameCol {
+			padding-left: 4%;
+			padding-right: 30px;
+			width: 70%;
+		}
+		#callCol {
+			width: 30%;
+		}
+	</style>
+
+	<div class="tableHeader">
+		<table>
+			<tr>
+				<td id="nameCol">Name</td>
+				<td id="callCol">Call In</td>
+			</tr>
+		</table>
+	</div>
 	<ul class="list" id="list">
 		<!-- Filled out by JavaScript in FamilyController.js -->
 	</ul>
-
 </div>
+

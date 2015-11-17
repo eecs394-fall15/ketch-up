@@ -384,7 +384,7 @@ angular
 				else { // Green
 					badge.setAttribute("class", "badge badge-balanced");
 				}
-				badge.innerHTML = "call in " + BadgeDaysToUnits(daysLeft);
+				badge.innerHTML = BadgeDaysToUnits(daysLeft);
 			}
 			listDiv.appendChild(badge);
 
