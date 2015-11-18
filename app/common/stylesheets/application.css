@@ -14,7 +14,8 @@
 
 .item {
   font-family: 'Roboto';
-  font-weight: 300;
+  font-weight: 500;
+  color: black;
 }
 
 .supersonic-navbar-mock {
@@ -106,4 +107,27 @@ tab-bar-item#coworker {
 .unit-label {
   border-left: transparent;
   padding-left: 0;
+}
+
+table {
+  width: 100%;
+}
+
+.tableHeader {
+  background-color: #c4d1d0;
+  color: white;
+  font-family: "Dosis";
+  font-weight: 600;
+  font-size: 1.2em;
+  text-transform: capitalize;
+}
+
+#nameCol {
+  padding: 0.4em 1.2em;
+  width: 70%;
+}
+
+#callCol {
+  width: 30%;
+  padding: 0.4em 0.6em;
 }
