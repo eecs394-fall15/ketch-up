@@ -57,10 +57,11 @@ angular
 					var typeElement = document.getElementById("editType");
 					card.set("type", type);
 					card.set("name", name);
-					card.set("phone", parseInt(phone.replace(/[ \(\)-]/g, "")) || undefined);
-					card.set("email", email || undefined);
+					card.set("phone", parseInt(phone.replace(/[ \(\)-]/g, "")) || null);
+					card.set("email", email || null);
+					alert(card.get("email"))
 					card.set("lastCall", lastCall);
-					card.set("interval", parseInt(interval) || undefined);
+					card.set("interval", parseInt(interval) || null);
 					card.set("unit", unit);
 					// Then, close the modal
 					card.save().then(function() {

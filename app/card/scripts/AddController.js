@@ -42,10 +42,10 @@ angular
 			card.save({
 				type: type,
 				name: name,
-				phone: parseInt(phone.replace(/[ \(\)-]/g, "")) || undefined,
-				email: email || undefined,
+				phone: parseInt(phone.replace(/[ \(\)-]/g, "")) || null,
+				email: email || null,
 				lastCall: lastCall,
-				interval: parseInt(interval) || undefined,
+				interval: parseInt(interval) || null,
 				unit: unit
 			}, {
 				success: function(card) {
