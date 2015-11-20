@@ -9,7 +9,7 @@ angular
 			if(d1 < d2) {
 				return -1;
 			}
-			else if(d2 > d1) {
+			else if(d1 > d2) {
 				return 1;
 			}
 			return 0;
