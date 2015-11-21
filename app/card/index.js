@@ -31,7 +31,7 @@ function calculateDaysLeft(lastCall, interval, unit) {
 			break;
 	}
 	var daysElapsedSinceToday = UTCToDays(Date.now() - copiedLastCall);
-	return interval - daysElapsedSinceToday;
+	return UTCToDays((interval * 24 * 60 * 60 * 1000) - Date.now() + copiedLastCall.getTime());
 }
 
 // Will return an array with all the form elements that failed. Will return an empty array if all succeeded.
