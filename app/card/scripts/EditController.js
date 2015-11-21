@@ -31,6 +31,7 @@ angular
 			var email = document.getElementById("editEmail").value;
 			var interval = parseInt(document.getElementById("editInterval").value).toString();
 			var unit = unitElement.options[unitElement.selectedIndex].text.toLowerCase();
+			var notes = document.getElementById("editNotes").value;
 			var lastCall = $scope.card.get("interval") == interval && $scope.card.get("unit") == unit ?
 				$scope.card.get("lastCall") : new Date(); // Update last call only if interval was changed
 
@@ -59,14 +60,14 @@ angular
 					card.set("name", name);
 					card.set("phone", parseInt(phone.replace(/[ \(\)-]/g, "")) || null);
 					card.set("email", email || null);
-					alert(card.get("email"))
 					card.set("lastCall", lastCall);
 					card.set("interval", parseInt(interval) || null);
 					card.set("unit", unit);
+					card.set("notes", notes);
 					// Then, close the modal
 					card.save().then(function() {
 						supersonic.ui.layers.pop();
-					});	
+					});
 				},
 				error: function(card, error) {
 					alert("Error in NewController: " + error.code + " " + error.message);
@@ -91,9 +92,9 @@ angular
 							alert("Error in ViewController (remove): " + error.code + " " + error.message);
 						}
 					});
-			  		
+
 			  	}
-			  	else {			
+			  	else {
 					supersonic.logger.log("Alert closed.");
 				}
 			});
