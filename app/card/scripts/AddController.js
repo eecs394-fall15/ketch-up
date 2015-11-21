@@ -18,6 +18,7 @@ angular
 			var lastCall = new Date();
 			var interval = document.getElementById("interval").value;
 			var unit = unitElement.options[unitElement.selectedIndex].text.toLowerCase();
+			var notes = document.getElementById("notes").value;
 
 			// Perform form validation and mark each incorrect input with a pastel red color
 			var validation = formValidation(name, phone, email, interval, type);
@@ -46,7 +47,8 @@ angular
 				email: email || null,
 				lastCall: lastCall,
 				interval: parseInt(interval) || null,
-				unit: unit
+				unit: unit,
+				notes: notes
 			}, {
 				success: function(card) {
 					// The object was saved successfully
@@ -58,5 +60,5 @@ angular
 
 			supersonic.ui.modal.hide();
 		}
-		
+
     });

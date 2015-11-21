@@ -43,7 +43,7 @@
   <super-navbar>
 
     <super-navbar-title class="navbar-title">
-      EDIT CARD
+      Edit Contact
     </super-navbar-title>
 
     <super-navbar-button side="right" ng-click="remove()")>
@@ -88,7 +88,7 @@
           </select>
         </label>
       </div>
-  </div>
+    </div>
 
     <label class="item item-input item-select" id="typeLabel">
       <span class="input-label">Contact Type</span>
@@ -97,6 +97,11 @@
         <option>Coworker</option>
         <option>Family</option>
       </select>
+    </label>
+
+    <label class="item item-input">
+      <span class="input-label notesLabel">Notes</span>
+      <textarea style="width: 60%" placeholder="e.g. hello i wanna ketchup" id="editNotes" class="notes">{{card.get('notes')}}</textarea>
     </label>
 
     <button class="button button-block button-positive" ng-click="save()">Save</button>
