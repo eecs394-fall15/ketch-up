@@ -364,6 +364,9 @@ angular
 			contactName.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
 			contactName.style.fontSize = "19px";
 			contactName.innerHTML = name || "";
+			if(contactName.innerHTML.length > 19) {
+				contactName.innerHTML = contactName.innerHTML.substring(0, 19) + "..";
+			}
 			listDiv.appendChild(contactName);
 
 			var daysLeft = calculateDaysLeft(lastCall, interval, unit);
@@ -548,7 +551,7 @@ angular
 				});
 
 				}
-			});				
+			});
 		}
 
 
@@ -607,5 +610,5 @@ angular
 				return yearsLeft + " " + unit
 			}
 		}
-		
+
     });
