@@ -507,9 +507,49 @@ angular
 			}
 		}
 
+
+
 		$scope.Postpone = function(id) {
-			alert("Postpone not implemented yet.")
+
+			var options = {
+			  message: "This postpones your reminder",
+			  buttonLabels: ["1 Day", "1 Week", "Cancel"]
+			};
+
+			supersonic.ui.dialog.confirm("Postpone by...", options).then(function(index) {
+
+				if (index == 2) {
+					supersonic.logger.log("Canceled");
+				}
+				else {
+
+					findId(id).save(null, {
+						success: function(card) {
+
+							var lastDate = card.get("lastCall");
+							var nd = new Date();
+
+						// Plus one
+						nd.setTime(lastDate.getTime()+ ((index==0?1:7)*24*60*60*1000));
+						supersonic.logger.log("lastDate = " + lastDate);
+
+						// Saving the date
+						card.set("lastCall", nd);
+						card.save().then(function() {
+							init()
+						})
+					},
+					error: function(card, error) {
+						alert("Error in ViewController: " + error.code + " " + error.message);
+					}
+				});
+
+				}
+			});				
 		}
+
+
+
 
 		$scope.Reset = function(id) {
 			findId(id).save(null, {
