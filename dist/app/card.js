@@ -354,7 +354,7 @@ angular
 		// <div>
 		// 	<div class="item item-icon-right">
 		// 		<p ng-click="ExpandMenu(ID)">Test Name</p>
-		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px">N</span>
+		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px" ng-click="ExpandMenu(ID)">N</span>
 		//		<i class="icon super-ios-email-outline" id="ID_email" style="display: none" ng-click="ComposeMail(ID)"></i>
 		//		<i class="icon super-ios-chatbubble-outline" id="ID_text" style="display: none; margin-right: 40px" ng-click="TextNumber(ID)"></i>
 		// 		<i class="icon super-ios-telephone-outline" id="ID_phone" ng-click="CallNumber(ID)"></i>
@@ -387,6 +387,7 @@ angular
 			var badge = document.createElement("span");
 			badge.id = objectId + "_badge"
 			badge.style.marginRight = "20px";
+			badge.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
 			if(daysLeft <= 0) { // Red; overdue or due today
 				badge.setAttribute("class", "badge badge-assertive");
 				if(daysLeft == 0) {
