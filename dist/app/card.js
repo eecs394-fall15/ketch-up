@@ -169,8 +169,8 @@ angular
 
 		$scope.Import = function() {
 			navigator.contacts.pickContact( function(contact) {
-				if(contact.id != -1) { // If user did not press cancel
-					var name = contact.name? contact.name.formatted : "";
+				if(contact.name) { // If user did not press cancel
+					var name = contact.name.formatted;
 					var email = contact.emails? contact.emails[0].value : "";
 					var phone = contact.phoneNumbers? contact.phoneNumbers[0].value.replace(/[ \(\)-]/g, "") : "";
 
