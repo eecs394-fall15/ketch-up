@@ -31,7 +31,7 @@ function calculateDaysLeft(lastCall, interval, unit) {
 			break;
 	}
 	var daysElapsedSinceToday = UTCToDays(Date.now() - copiedLastCall);
-	return interval - daysElapsedSinceToday;
+	return UTCToDays((interval * 24 * 60 * 60 * 1000) - Date.now() + copiedLastCall.getTime());
 }
 
 // Will return an array with all the form elements that failed. Will return an empty array if all succeeded.
@@ -477,7 +477,7 @@ angular
 		$scope.CallNumber = function(id) {
 			var phoneNumber = findId(id).get("phone");
 			if(phoneNumber) {
-				window.location = "tel:" + phoneNumber;
+				supersonic.app.openURL("tel:" + phoneNumber);
 				$scope.Reset(id);
 			}
 			else {
@@ -490,7 +490,7 @@ angular
 		$scope.TextNumber = function(id) {
 			var phoneNumber = findId(id).get("phone");
 			if(phoneNumber) {
-				window.location = "sms:" + phoneNumber;
+				supersonic.app.openURL("sms:" + phoneNumber);
 				$scope.Reset(id);
 			}
 			else {
@@ -503,7 +503,7 @@ angular
 		$scope.ComposeMail = function(id) {
 			var email = findId(id).get("email");
 			if(email) {
-				window.location = "mailto:" + email;
+				supersonic.app.openURL("mailto:" + email);
 				$scope.Reset(id);
 			}
 			else {

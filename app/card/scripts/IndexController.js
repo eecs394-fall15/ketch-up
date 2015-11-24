@@ -200,7 +200,7 @@ angular
 		$scope.CallNumber = function(id) {
 			var phoneNumber = findId(id).get("phone");
 			if(phoneNumber) {
-				window.location = "tel:" + phoneNumber;
+				supersonic.app.openURL("tel:" + phoneNumber);
 				$scope.Reset(id);
 			}
 			else {
@@ -213,7 +213,7 @@ angular
 		$scope.TextNumber = function(id) {
 			var phoneNumber = findId(id).get("phone");
 			if(phoneNumber) {
-				window.location = "sms:" + phoneNumber;
+				supersonic.app.openURL("sms:" + phoneNumber);
 				$scope.Reset(id);
 			}
 			else {
@@ -226,7 +226,7 @@ angular
 		$scope.ComposeMail = function(id) {
 			var email = findId(id).get("email");
 			if(email) {
-				window.location = "mailto:" + email;
+				supersonic.app.openURL("mailto:" + email);
 				$scope.Reset(id);
 			}
 			else {
