@@ -1,6 +1,6 @@
 <div ng-controller="IndexController">
 	<super-navbar>
-		<super-navbar-button side="right" onclick="supersonic.ui.modal.show(new supersonic.ui.View('card#add'), { animate: true });">
+		<super-navbar-button side="right" onclick="var view = new supersonic.ui.View('card#add'); supersonic.ui.layers.push(view);">
 			Add
 		</super-navbar-button>
 		<super-navbar-title>

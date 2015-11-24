@@ -111,10 +111,6 @@ angular
 	.module('card')
 	.controller("AddController", function ($scope, supersonic) {
 
-		$scope.cancel = function () {
-			supersonic.ui.modal.hide();
-		};
-
 		$scope.SaveTapped = function () {
 
 			// Save input in variables
@@ -148,6 +144,7 @@ angular
 			// If all looks good, then submit info
 			var ContactsObject = Parse.Object.extend("ketchupData");
 			var card = new ContactsObject();
+			alert(parseInt(phone.replace(/[ \(\)-]/g, "")))
 
 			card.save({
 				type: type,
@@ -161,13 +158,30 @@ angular
 			}, {
 				success: function(card) {
 					// The object was saved successfully
+					supersonic.ui.layers.pop();
 				},
 				error: function(card, error) {
 					alert("Error in NewController: " + error.code + " " + error.message);
+					supersonic.ui.layers.pop();
 				}
 			});
+		}
 
-			supersonic.ui.modal.hide();
+		$scope.Import = function() {
+			navigator.contacts.pickContact( function(contact) {
+				if(contact.id != -1) { // If user did not press cancel
+					var name = contact.name? contact.name.formatted : "";
+					var email = contact.emails? contact.emails[0].value : "";
+					var phone = contact.phoneNumbers? contact.phoneNumbers[0].value.replace(/[ \(\)-]/g, "") : "";
+
+					document.getElementById("name").value = name;
+					document.getElementById("email").value = email;
+					document.getElementById("phone").value = phone;
+					document.getElementById("interval").value = "1";
+				}
+			}, function(err) {
+				alert('Error at AddController.js: ' + err);
+			});
 		}
 
     });
