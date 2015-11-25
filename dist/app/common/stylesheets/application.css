@@ -150,3 +150,8 @@ table {
 .notesLabel {
   margin-top: -2em;
 }
+
+.wrap {
+  white-space: pre-wrap;
+  background-color: red;
+}

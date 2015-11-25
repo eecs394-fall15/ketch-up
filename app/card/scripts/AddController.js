@@ -35,7 +35,6 @@ angular
 			// If all looks good, then submit info
 			var ContactsObject = Parse.Object.extend("ketchupData");
 			var card = new ContactsObject();
-			alert(parseInt(phone.replace(/[ \(\)-]/g, "")))
 
 			card.save({
 				type: type,
