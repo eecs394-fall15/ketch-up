@@ -120,7 +120,7 @@ angular
 				if(daysLeft <= 3) { // Orange
 					badge.setAttribute("class", "badge badge-orange");
 				}
-				else if(daysLeft <= 7) { // Yellow
+				else if(daysLeft < 7) { // Yellow
 					badge.setAttribute("class", "badge badge-energized");
 				}
 				else { // Green
