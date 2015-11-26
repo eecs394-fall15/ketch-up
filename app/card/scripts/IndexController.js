@@ -62,8 +62,8 @@ angular
 
 		// <div>
 		// 	<div class="item item-icon-right">
-		// 		<p ng-click="ExpandMenu(ID)">Test Name</p>
-		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px" ng-click="ExpandMenu(ID)">N</span>
+		// 		<p ng-click="ContactTap(ID)">Test Name</p>
+		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px" ng-click="ContactTap(ID)">N</span>
 		//		<i class="icon super-ios-email-outline" id="ID_email" style="display: none" ng-click="ComposeMail(ID)"></i>
 		//		<i class="icon super-ios-chatbubble-outline" id="ID_text" style="display: none; margin-right: 40px" ng-click="TextNumber(ID)"></i>
 		// 		<i class="icon super-ios-telephone-outline" id="ID_phone" ng-click="CallNumber(ID)"></i>
@@ -94,7 +94,7 @@ angular
 			listDiv.setAttribute("class", "item item-icon-right");
 
 			var contactName = document.createElement("p");
-			contactName.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
+			contactName.setAttribute("ng-click", "ContactTap('" + objectId + "')");
 			contactName.style.fontSize = "19px";
 			contactName.innerHTML = name || "";
 			if(contactName.innerHTML.length > 19) {
@@ -106,7 +106,7 @@ angular
 			var badge = document.createElement("span");
 			badge.id = objectId + "_badge"
 			badge.style.marginRight = "20px";
-			badge.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
+			badge.setAttribute("ng-click", "ContactTap('" + objectId + "')");
 			if(daysLeft <= 0) { // Red; overdue or due today
 				badge.setAttribute("class", "badge badge-assertive");
 				if(daysLeft == 0) {
@@ -211,25 +211,46 @@ angular
 			return mainDiv
 		}
 
-		$scope.ExpandMenu = function(id) {
+		$scope.ExpandSingleMenu = function(id) {
+			$( "#" + id ).slideDown("medium");
+			$( "#" + id + "_badge" ).fadeOut("medium");
+			$( "#" + id + "_call" ).animate({
+				marginRight: "80px"
+			}, 500);
+			$( "#" + id + "_text").fadeIn("slow");
+			$( "#" + id + "_email").fadeIn("medium");
+		}
+
+		$scope.ContractSingleMenu = function(id) {
+			$( "#" + id ).slideUp("medium");
+			$( "#" + id + "_badge" ).fadeIn("medium");
+			$( "#" + id + "_call" ).animate({
+				marginRight: ""
+			}, 500);
+			$( "#" + id + "_text").fadeOut("slow");
+			$( "#" + id + "_email").fadeOut("medium");
+		}
+
+		$scope.ContractAllMenus = function() {
+			var listArray = document.getElementById("list").children;
+			for(var contactNo = 0; contactNo < listArray.length; contactNo++) {
+				var drawer = $( listArray[contactNo].children[1] )
+				if(drawer.css("display") != "none") {
+					$scope.ContractSingleMenu(drawer.attr("id"));
+				}
+			}
+		}
+
+		$scope.ContactTap = function(id) {
+
+			$scope.ContractAllMenus();
+
 			var blockDisplaySetting = $( "#" + id ).css("display")
 			if(blockDisplaySetting == "none") {
-				$( "#" + id ).slideDown("medium");
-				$( "#" + id + "_badge" ).fadeOut("medium");
-				$( "#" + id + "_call" ).animate({
-					marginRight: "80px"
-				}, 500);
-				$( "#" + id + "_text").fadeIn("slow");
-				$( "#" + id + "_email").fadeIn("medium");
+				$scope.ExpandSingleMenu(id);
 			}
 			else {
-				$( "#" + id ).slideUp("medium");
-				$( "#" + id + "_badge" ).fadeIn("medium");
-				$( "#" + id + "_call" ).animate({
-					marginRight: ""
-				}, 500);
-				$( "#" + id + "_text").fadeOut("slow");
-				$( "#" + id + "_email").fadeOut("medium");
+				$scope.ContractSingleMenu(id);
 			}
 		}
 
