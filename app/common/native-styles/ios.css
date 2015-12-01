@@ -4,7 +4,10 @@
  ***********************************************************/
 
 navigation-bar {
-  background-color: #6FA8DC;
+  background-image: url(images/ketchup.png);
+  background-position: top;
+  background-size: 400px 65px;
+  background-repeat: no-repeat;
   color: #ffffff;
 }
 
@@ -17,7 +20,7 @@ navigation-bar title {
 
 navigation-bar button, navigation-bar back-bar-button {
   color: #ffffff;
-  font-weight: 300;
+  font-weight: 400;
 }
 
 super-navigate {
@@ -37,19 +40,7 @@ tab-bar tab-bar-item {
 }
 
 tab-bar tab-bar-item:selected {
-  color: #1596f7;
-}
-
-tab-bar-item#settings {
-  background-image: url(icons/cog.svg);
-}
-
-tab-bar-item#index {
-  background-image: url(icons/home.svg);
-}
-
-tab-bar-item#internet {
-  background-image: url(icons/search.svg);
+  color: #29abe2;
 }
 
 tab-bar-item#family {

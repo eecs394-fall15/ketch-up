@@ -4,7 +4,10 @@
  ***********************************************************/
 
 navigation-bar {
-  background-color: #00B5FF;
+  background-image: url(images/ketchup.png);
+  background-position: top;
+  background-size: 380px 65px;
+  background-repeat: no-repeat;
   color: #ffffff;
   padding-left: 6px;
   padding-right: 6px;
@@ -49,7 +52,7 @@ tab-bar tab-bar-item {
 }
 
 tab-bar tab-bar-item:selected {
-  color: #1596f7;
+  color: #29abe2;
 }
 
 tab-bar divider {
@@ -57,19 +60,7 @@ tab-bar divider {
 }
 
 tab-bar tab-bar-item marker-top:selected {
-  background-color: #1596f7;
-}
-
-tab-bar-item#settings {
-  background-image: url(icons/cog.svg);
-}
-
-tab-bar-item#index {
-  background-image: url(icons/home.svg);
-}
-
-tab-bar-item#internet {
-  background-image: url(icons/search.svg);
+  background-color: #29abe2;
 }
 
 tab-bar-item#family {
