@@ -48,7 +48,7 @@ angular
 			for (var i = 0; i < results.length; i++) { // Go through all rows in database, but only append if it matches the URL id (friend, family, or coworker)
 				// Append row as list element
 				if(getURLParameter("type") == results[i].get("type") || getURLParameter("type") == "all") {
-					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("interval"), results[i].get("unit")));
+					list.appendChild(CreateListElement(results[i].id, results[i].get("name"), results[i].get("lastCall"), results[i].get("interval"), results[i].get("unit"), results[i].get("notes")));
 				}
 			}
 			// Once it's done, recompile angular module to allow the ng-clicks to work.
@@ -62,21 +62,31 @@ angular
 
 		// <div>
 		// 	<div class="item item-icon-right">
-		// 		<p ng-click="ExpandMenu(ID)">Test Name</p>
-		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px" ng-click="ExpandMenu(ID)">N</span>
+		// 		<p ng-click="ContactTap(ID)">Test Name</p>
+		// 		<span class="badge badge-assertive" id="ID_badge" style="margin-right:20px" ng-click="ContactTap(ID)">N</span>
 		//		<i class="icon super-ios-email-outline" id="ID_email" style="display: none" ng-click="ComposeMail(ID)"></i>
 		//		<i class="icon super-ios-chatbubble-outline" id="ID_text" style="display: none; margin-right: 40px" ng-click="TextNumber(ID)"></i>
 		// 		<i class="icon super-ios-telephone-outline" id="ID_phone" ng-click="CallNumber(ID)"></i>
 		// 	</div>
-		// 	<div class="item" id="ID" style="display:none; border-top:none; padding:0">
-		// 		<div class="button-bar">
-		// 			<a class="button button-light" style="border-bottom:0" ng-click="Postpone(ID)">Postpone</a>
-		// 			<a class="button button-light" style="border-bottom:0" ng-click="Reset(ID)">Caught Up</a>
-		// 			<a class="button button-light" style="border-bottom:0" ng-click="Edit(ID)">Edit Contact</a>
+		// 	<div id="ID" style="display:none; border-top:none">
+		// 		<div class="item" style="padding:0">
+		// 			<div class="button-bar">
+		// 				<a class="button button-light" style="border-bottom:0" ng-click="Postpone(ID)">Postpone</a>
+		// 				<a class="button button-light" style="border-bottom:0" ng-click="Reset(ID)">Caught Up</a>
+		// 				<a class="button button-light" style="border-bottom:0" ng-click="Edit(ID)">Edit Contact</a>
+		// 			</div>
+		// 		</div>
+		// 		<div class="item" ng-click="Notes(ID)" style="display:none" but only if contact has no notes>
+		// 			<p id="ID_trimmedNotes">
+		// 				TRIMMED NOTES
+		//			</p>
+		// 			<p id="ID_notes" style="display:none">
+		// 				NOTES
+		// 			</p>
 		// 		</div>
 		// 	</div>
 		// </div>
-		var CreateListElement = function(objectId, name, lastCall, interval, unit) {
+		var CreateListElement = function(objectId, name, lastCall, interval, unit, notes) {
 			var mainDiv = document.createElement("div");
 
 			// For <div class="item item-icon-right" href="#">
@@ -84,7 +94,7 @@ angular
 			listDiv.setAttribute("class", "item item-icon-right");
 
 			var contactName = document.createElement("p");
-			contactName.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
+			contactName.setAttribute("ng-click", "ContactTap('" + objectId + "')");
 			contactName.style.fontSize = "19px";
 			contactName.innerHTML = name || "";
 			if(contactName.innerHTML.length > 19) {
@@ -96,7 +106,7 @@ angular
 			var badge = document.createElement("span");
 			badge.id = objectId + "_badge"
 			badge.style.marginRight = "20px";
-			badge.setAttribute("ng-click", "ExpandMenu('" + objectId + "')");
+			badge.setAttribute("ng-click", "ContactTap('" + objectId + "')");
 			if(daysLeft <= 0) { // Red; overdue or due today
 				badge.setAttribute("class", "badge badge-assertive");
 				if(daysLeft == 0) {
@@ -110,7 +120,7 @@ angular
 				if(daysLeft <= 3) { // Orange
 					badge.setAttribute("class", "badge badge-orange");
 				}
-				else if(daysLeft <= 7) { // Yellow
+				else if(daysLeft < 7) { // Yellow
 					badge.setAttribute("class", "badge badge-energized");
 				}
 				else { // Green
@@ -145,11 +155,13 @@ angular
 			callIcon.setAttribute("ng-click", "CallNumber('" + objectId + "')")
 			listDiv.appendChild(callIcon);
 
-			// For <div class="item" id="ID" style="display:none; border-top:none; padding:0">
+			var slidingDiv = document.createElement("div");
+			slidingDiv.id = objectId;
+			slidingDiv.style.display = "none";
+
+			// For <div class="item" style="padding:0"> that'll hold the buttons
 			var menuDiv = document.createElement("div");
 			menuDiv.setAttribute("class", "item");
-			menuDiv.id = objectId;
-			menuDiv.style.display = "none";
 			menuDiv.style.borderTop = "none";
 			menuDiv.style.padding = "0";
 
@@ -170,31 +182,93 @@ angular
 			buttonBar.appendChild(CreateButton("Reset", "Caught Up"));
 			buttonBar.appendChild(CreateButton("Edit", "Edit Contact"));
 
+			// For <div class="item"> that'll hold the notes iff they exist
+			var notesDiv = document.createElement("div");
+			notesDiv.setAttribute("class", "item");
+			notesDiv.setAttribute("ng-click", "Notes('" + objectId + "')");
+			if(!notes) {
+				notesDiv.style.display = "none";
+			}
+
+			var trimmedNotesParagraph = document.createElement("p");
+			trimmedNotesParagraph.id = objectId + "_trimmedNotes";
+			trimmedNotesParagraph.innerHTML = notes;
+			notesDiv.appendChild(trimmedNotesParagraph);
+
+			var notesParagraph = document.createElement("p");
+			notesParagraph.id = objectId + "_notes";
+			notesParagraph.innerHTML = notes;
+			notesParagraph.style.whiteSpace = "pre-wrap"
+			notesParagraph.style.display = "none";
+			notesDiv.appendChild(notesParagraph);
+
+			slidingDiv.appendChild(menuDiv);
+			slidingDiv.appendChild(notesDiv);
+
 			mainDiv.appendChild(listDiv);
-			mainDiv.appendChild(menuDiv);
+			mainDiv.appendChild(slidingDiv);
 
 			return mainDiv
 		}
 
-		$scope.ExpandMenu = function(id) {
+		$scope.ExpandSingleMenu = function(id) {
+			$( "#" + id ).slideDown("medium");
+			$( "#" + id + "_badge" ).fadeOut("medium");
+			$( "#" + id + "_call" ).animate({
+				marginRight: "80px"
+			}, 500);
+			$( "#" + id + "_text").fadeIn("slow");
+			$( "#" + id + "_email").fadeIn("medium");
+		}
+
+		$scope.ContractSingleMenu = function(id) {
+			$( "#" + id ).slideUp("medium");
+			$( "#" + id + "_badge" ).fadeIn("medium");
+			$( "#" + id + "_call" ).animate({
+				marginRight: ""
+			}, 500);
+			$( "#" + id + "_text").fadeOut("slow");
+			$( "#" + id + "_email").fadeOut("medium");
+		}
+
+		$scope.ContractAllMenus = function() {
+			var listArray = document.getElementById("list").children;
+			for(var contactNo = 0; contactNo < listArray.length; contactNo++) {
+				var drawer = $( listArray[contactNo].children[1] )
+				if(drawer.css("display") != "none") {
+					$scope.ContractSingleMenu(drawer.attr("id"));
+				}
+			}
+		}
+
+		$scope.ContactTap = function(id) {
+
+			$scope.ContractAllMenus();
+
 			var blockDisplaySetting = $( "#" + id ).css("display")
 			if(blockDisplaySetting == "none") {
-				$( "#" + id ).slideDown("medium");
-				$( "#" + id + "_badge" ).fadeOut("medium");
-				$( "#" + id + "_call" ).animate({
-					marginRight: "80px"
-				}, 500);
-				$( "#" + id + "_text").fadeIn("slow");
-				$( "#" + id + "_email").fadeIn("medium");
+				$scope.ExpandSingleMenu(id);
 			}
 			else {
-				$( "#" + id ).slideUp("medium");
-				$( "#" + id + "_badge" ).fadeIn("medium");
-				$( "#" + id + "_call" ).animate({
-					marginRight: ""
-				}, 500);
-				$( "#" + id + "_text").fadeOut("slow");
-				$( "#" + id + "_email").fadeOut("medium");
+				$scope.ContractSingleMenu(id);
+			}
+		}
+
+		$scope.Notes = function(id) {
+			var trimmedNotesP = document.getElementById(id + "_trimmedNotes");
+			var notesP = document.getElementById(id + "_notes");
+			var isTheTextOverflowing = $(trimmedNotesP).is(":visible") ? trimmedNotesP.offsetWidth < trimmedNotesP.scrollWidth : true;
+
+			if(isTheTextOverflowing) { // Cue the animation iff it's needed
+				var trimmedNotesDisplay = $(trimmedNotesP).css("display");
+				if(trimmedNotesDisplay == "block") { // If the trimmed notes are being displayed, and the full notes aren't
+					$(trimmedNotesP).hide(200)
+					$(notesP).show("medium")
+				}
+				else { // If the full notes are being displayed, and the trimmed notes aren't
+					$(trimmedNotesP).show(200)
+					$(notesP).hide("medium")
+				}
 			}
 		}
 
@@ -237,8 +311,6 @@ angular
 			}
 		}
 
-
-
 		$scope.Postpone = function(id) {
 
 			var options = {
@@ -277,9 +349,6 @@ angular
 				}
 			});
 		}
-
-
-
 
 		$scope.Reset = function(id) {
 			findId(id).save(null, {
