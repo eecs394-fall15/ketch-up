@@ -5,8 +5,8 @@
 
 navigation-bar {
   background-image: url(images/ketchup.png);
-  background-position: top right;
-  background-size: 355px 65px;
+  background-position: bottom right;
+  background-size: 370px 65px;
   background-repeat: no-repeat;
   color: #ffffff;
 }
