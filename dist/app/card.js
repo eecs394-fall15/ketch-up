@@ -694,4 +694,37 @@ angular
 			}
 		}
 
+		function sendText(number) {
+
+            var body = "APP NOTIFICATION TEST";
+            var phoneNumber = "+16155691920";
+            var month = 11;
+            var day = 30;
+            var year = 2015;
+            var hour = 8;
+            var minute = 30;
+            var ampm = "PM"
+
+            var parameters = {
+                "to": phoneNumber,
+                "bodyText": body,
+                "month": month,
+                "day": day,
+                "year": year,
+                "hour": hour,
+                "minute": minute,
+                "ampm": ampm
+              };
+
+              $.get( 'https://agile-plains-9573.herokuapp.com/text',parameters, function(data) {
+                //$('#results').html(data);
+                console.log('Made GET call.')
+                console.dir(data);
+                alert(JSON.stringify(data));
+              });
+        }
+
+        sendText("+16155691920");
+
+
     });

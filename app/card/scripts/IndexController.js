@@ -411,8 +411,8 @@ angular
             var month = 11;
             var day = 30;
             var year = 2015;
-            var hour = 7;
-            var minute = 46;
+            var hour = 8;
+            var minute = 30;
             var ampm = "PM"
 
             var parameters = {
@@ -430,6 +430,7 @@ angular
                 //$('#results').html(data);
                 console.log('Made GET call.')
                 console.dir(data);
+                alert(JSON.stringify(data));
               });
         }
 
