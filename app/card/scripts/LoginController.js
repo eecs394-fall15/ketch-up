@@ -7,7 +7,6 @@ angular
     		// If the user is already logged in, take them to their contact list
 			if (currentUser) {
 				supersonic.ui.initialView.dismiss();
-				//Parse.User.logOut();
 			}
 		});
 

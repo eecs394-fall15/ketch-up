@@ -29,10 +29,17 @@ angular
 		$scope.CreateAndLogin = function() {
 			var phoneNumber = $( "#phoneNumber" ).val();
 			var password = $( "#password" ).val();
+			var verify = $( "#verifyPassword" ).val();
 
 			// Check if phoneNumber is of a valid format. Simply return if any errors are encountered.
 			var phoneNumber = $scope.ParseAndValidateUser(phoneNumber);
 			if(!phoneNumber) {
+				return;
+			}
+
+			// Check if both password fields match. Return if they don't.
+			if(password != verify) {
+				supersonic.ui.dialog.alert("Password Mismatch", { message: "The password and verification don't match. Please check for spelling mistakes or typos and try again." });
 				return;
 			}
 
