@@ -68,6 +68,30 @@ function formValidation(name, phone, email, interval, type) {
 	return result;
 }
 
+function ParseAndValidateUser(phoneNumber) {
+	var re = /^(?:\+ *[0-9]{1,3} *)?(?:(?:\([0-9]{3}\))|(?:[0-9]{3}))[ -]*[0-9]{3}[ -]*[0-9]+$/;
+	if(!re.test(phoneNumber)) {
+		supersonic.ui.dialog.alert("Invalid phone number.", { message: "Please enter only the digits and a leading + if needed." });
+		return false;
+	}
+
+	// Remove all spaces, parentheses, dashes, asterisks, and pound symbols. This will leave the leading + if it exists
+	phoneNumber = phoneNumber.replace(/[ \(\)\-\*#]/g, "");
+
+	// If it doesn't start with a +, assume it's a US number, so make sure it has 10 digits
+	if(phoneNumber[0] != "+") {
+		if(phoneNumber.length != 10) {
+			supersonic.ui.dialog.alert("Invalid phone number.", { message: "Make sure the number either has 10 digits, or includes the country code (e.g. +5212345678)" });
+			return false;
+		}
+
+		// If it doesn't start with a + and it's a valid US number, simply prepend a + to the result for saving
+		phoneNumber = "+1" + phoneNumber;
+	}
+
+	return phoneNumber;
+}
+
 // Some String prototypes that are used throughout the app
 
 String.prototype.capitalizeFirstLetter = function() {
@@ -721,6 +745,12 @@ angular
 		$scope.Login = function() {
 			var phoneNumber = $( "#phoneNumber" ).val();
 			var password = $( "#password" ).val();
+
+			// Check if phoneNumber is of a valid format. Simply return if any errors are encountered.
+			var phoneNumber = ParseAndValidateUser(phoneNumber);
+			if(!phoneNumber) {
+				return;
+			}
 			
 			Parse.User.logIn(phoneNumber, password, {
 				success: function(user) {
@@ -728,7 +758,6 @@ angular
 					supersonic.ui.initialView.dismiss();
 				},
 				error: function(user, error) {
-					alert(JSON.stringify(user))
 					// The login failed. Alert user.
 					var options = {
 						message: "Your phone number and password combination were not found in our database. Please ensure you have entered the information correctly."
@@ -747,37 +776,13 @@ angular
 	.module('card')
 	.controller("RegisterController", function ($scope, supersonic) {
 
-		$scope.ParseAndValidateUser = function(phoneNumber) {
-			var re = /^(?:\+ *[0-9]{1,3} *)?(?:(?:\([0-9]{3}\))|(?:[0-9]{3}))[ -]*[0-9]{3}[ -]*[0-9]+$/;
-			if(!re.test(phoneNumber)) {
-				supersonic.ui.dialog.alert("Invalid phone number.", { message: "Please enter only the digits and a leading + if needed." });
-				return false;
-			}
-
-			// Remove all spaces, parentheses, dashes, asterisks, and pound symbols. This will leave the leading + if it exists
-			phoneNumber = phoneNumber.replace(/[ \(\)\-\*#]/g, "");
-
-			// If it doesn't start with a +, assume it's a US number, so make sure it has 10 digits
-			if(phoneNumber[0] != "+") {
-				if(phoneNumber.length != 10) {
-					supersonic.ui.dialog.alert("Invalid phone number.", { message: "Make sure the number either has 10 digits, or includes the country code (e.g. +5212345678)" });
-					return false;
-				}
-
-				// If it doesn't start with a + and it's a valid US number, simply prepend a + to the result for saving
-				phoneNumber = "+1" + phoneNumber;
-			}
-
-			return phoneNumber;
-		}
-
 		$scope.CreateAndLogin = function() {
 			var phoneNumber = $( "#phoneNumber" ).val();
 			var password = $( "#password" ).val();
 			var verify = $( "#verifyPassword" ).val();
 
 			// Check if phoneNumber is of a valid format. Simply return if any errors are encountered.
-			var phoneNumber = $scope.ParseAndValidateUser(phoneNumber);
+			var phoneNumber = ParseAndValidateUser(phoneNumber);
 			if(!phoneNumber) {
 				return;
 			}

@@ -13,6 +13,12 @@ angular
 		$scope.Login = function() {
 			var phoneNumber = $( "#phoneNumber" ).val();
 			var password = $( "#password" ).val();
+
+			// Check if phoneNumber is of a valid format. Simply return if any errors are encountered.
+			var phoneNumber = ParseAndValidateUser(phoneNumber);
+			if(!phoneNumber) {
+				return;
+			}
 			
 			Parse.User.logIn(phoneNumber, password, {
 				success: function(user) {
@@ -20,7 +26,6 @@ angular
 					supersonic.ui.initialView.dismiss();
 				},
 				error: function(user, error) {
-					alert(JSON.stringify(user))
 					// The login failed. Alert user.
 					var options = {
 						message: "Your phone number and password combination were not found in our database. Please ensure you have entered the information correctly."
