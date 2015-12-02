@@ -27,7 +27,11 @@ module.exports =
   ]
 
   # rootView:
-  #   location: "example#getting-started"
+  #   location: "card#login"
+
+  initialView:
+    id: "initialView"
+    location: "card#login"
 
   preloads: [
     {
@@ -51,7 +55,3 @@ module.exports =
   #     showOnAppLoad: false
   #   options:
   #     animation: "swingingDoor"
-  #
-  # initialView:
-  #   id: "initialView"
-  #   location: "example#initial-view"

@@ -37,6 +37,7 @@ angular
 			var card = new ContactsObject();
 
 			card.save({
+				phoneId: Parse.User.current().get("username"),
 				type: type,
 				name: name,
 				phone: parseInt(phone.replace(/[ \(\)-]/g, "")) || null,

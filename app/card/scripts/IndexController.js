@@ -22,9 +22,19 @@ angular
 		}
 
 		var init = function() {
+			// First we gotta check if the user is logged in
+			var currentUser = Parse.User.current();
+			// If they aren't, show them the login page
+			if (!currentUser) {
+				supersonic.ui.initialView.show();
+			}
+			// If they are, just proceed as normal
+
 			// Save all the info into allFamilyCards
 			var ContactsObject = Parse.Object.extend("ketchupData");
+
 			var query = new Parse.Query(ContactsObject);
+			query.equalTo("phoneId", Parse.User.current().get("username"));
 			query.descending("createdAt").find( {
 				success: function (results) { // Find all values in database and stuff into results. Results will be in descending order by creation date.
 					results.sort( sortByTimeRemaining ) // Sort by amount of time remaining
@@ -32,7 +42,7 @@ angular
 					GenerateList(results);
 				},
 				error: function (error) {
-						alert("Error in IndexController: " + error.code + " " + error.message);
+					alert("Error in IndexController: " + error.code + " " + error.message);
 				}
 			});
 		};

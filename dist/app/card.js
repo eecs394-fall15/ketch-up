@@ -146,6 +146,7 @@ angular
 			var card = new ContactsObject();
 
 			card.save({
+				phoneId: Parse.User.current().get("username"),
 				type: type,
 				name: name,
 				phone: parseInt(phone.replace(/[ \(\)-]/g, "")) || null,
@@ -312,9 +313,19 @@ angular
 		}
 
 		var init = function() {
+			// First we gotta check if the user is logged in
+			var currentUser = Parse.User.current();
+			// If they aren't, show them the login page
+			if (!currentUser) {
+				supersonic.ui.initialView.show();
+			}
+			// If they are, just proceed as normal
+
 			// Save all the info into allFamilyCards
 			var ContactsObject = Parse.Object.extend("ketchupData");
+
 			var query = new Parse.Query(ContactsObject);
+			query.equalTo("phoneId", Parse.User.current().get("username"));
 			query.descending("createdAt").find( {
 				success: function (results) { // Find all values in database and stuff into results. Results will be in descending order by creation date.
 					results.sort( sortByTimeRemaining ) // Sort by amount of time remaining
@@ -322,7 +333,7 @@ angular
 					GenerateList(results);
 				},
 				error: function (error) {
-						alert("Error in IndexController: " + error.code + " " + error.message);
+					alert("Error in IndexController: " + error.code + " " + error.message);
 				}
 			});
 		};
@@ -692,6 +703,61 @@ angular
 				}
 				return yearsLeft + " " + unit
 			}
+		}
+
+    });
+angular
+	.module('card')
+	.controller("LoginController", function ($scope, supersonic) {
+
+		$scope.Login = function() {
+			var phoneNumber = $( "#phoneNumber" ).val();
+			var password = $( "#password" ).val();
+			
+			Parse.User.logIn(phoneNumber, password, {
+				success: function(user) {
+					// Dismiss login page after successful login.
+					supersonic.ui.initialView.dismiss();
+				},
+				error: function(user, error) {
+					// The login failed. Alert user.
+					var options = {
+						message: "Your phone number and password combination were not found in our database. Please ensure you have entered the information correctly."
+					};
+					supersonic.ui.dialog.alert("Invalid Login Parameters", options);
+				}
+			});
+		}
+
+		$scope.Register = function() {
+			supersonic.ui.layers.push(new supersonic.ui.View("card#register"));
+		}
+
+    });
+angular
+	.module('card')
+	.controller("RegisterController", function ($scope, supersonic) {
+
+		$scope.CreateAndLogin = function() {
+			var phoneNumber = $( "#phoneNumber" ).val();
+			var password = $( "#password" ).val();
+
+			var user = new Parse.User();
+			user.set("username", phoneNumber);
+			user.set("password", password);
+
+			user.signUp(null, {
+				success: function(user) {
+					// Hooray! Let them use the app now.
+					supersonic.ui.initialView.dismiss();
+				},
+				error: function(user, error) {
+					// Show the error message somewhere and let the user try again.
+					supersonic.ui.dialog.alert("Invalid Registration Parameters", { message: error.message });
+				}
+
+			});
+			
 		}
 
     });

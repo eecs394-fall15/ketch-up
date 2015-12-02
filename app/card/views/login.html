@@ -1,0 +1,22 @@
+<div ng-controller="LoginController">
+	
+	<super-navbar></super-navbar>
+
+	<div class="list list-inset">
+		<label class="item item-input">
+			<input type="tel" id="phoneNumber" placeholder="Phone Number">
+		</label>
+		<label class="item item-input">
+			<input type="password" id="password" placeholder="Password">
+		</label>
+	</div>
+
+	<div class="padding">
+		<button class="button button-block button-positive" ng-click="Login()">
+			Login
+		</button>
+		<button class="button button-block button-stable" ng-click="Register()">
+			Register
+		</button>
+	</div>
+</div>
